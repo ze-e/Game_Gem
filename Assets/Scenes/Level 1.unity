@@ -9656,7 +9656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  miningRate: 1
+  miningSpeed: 3
 --- !u!1001 &1582543954
 PrefabInstance:
   m_ObjectHideFlags: 0

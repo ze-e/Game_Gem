@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Dirt : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class Dirt : MonoBehaviour
     public GameObject[] gemPrefabs;
 
     public GameObject dirtSprite;
-    
+    public GameObject healthText;
+
     public int toughness;
     public int maxLuck;
     int luck;
@@ -61,6 +63,8 @@ public class Dirt : MonoBehaviour
     {
         // reduce health
         health--;
+        if (health < 1) health = 0;
+        ShowHealthText();
 
         // Reduce opacity of SpriteRenderer based on remaining health
         SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
@@ -70,7 +74,24 @@ public class Dirt : MonoBehaviour
         spriteRenderer.color = newSpriteColor;
 
         //destroy when run out of health
-        if (health < 1) DestroyDirt();
+        if (health == 0) DestroyDirt();
+    }
+
+    void ShowHealthText()
+    {
+        Instantiate(healthText, transform.position, Quaternion.identity);
+        Transform[] children = healthText.GetComponentsInChildren<Transform>();
+        foreach (var child in children)
+        {
+            if (child.gameObject.name == "health")
+            {
+                child.gameObject.GetComponentInChildren<TMP_Text>().text = health.ToString();
+            }
+            if (child.gameObject.name == "maxHealth")
+            {
+                child.gameObject.GetComponentInChildren<TMP_Text>().text = maxHealth.ToString();
+            }
+        }
     }
 
     void DestroyDirt()
