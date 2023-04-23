@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     //Mine
     public float miningRate = 1f; 
     bool isMining = false;
-    private Dirt currentDirt;
 
     private void Start()
     {
@@ -20,17 +19,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Move();
+        if(!isMining) Move();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Space Pressed");
             if(!isMining) StartCoroutine(Mine());
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            Debug.Log("Space Up");
-            //StopMining();
+            animator.SetBool("Mining", false);
         }
     }
 
@@ -71,15 +68,15 @@ public class PlayerController : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
         foreach (Collider2D collider in colliders)
         {
-            Dirt currentDirt = collider.GetComponent<Dirt>();
-            if (currentDirt != null && isMining)
+            Dirt dirt = collider.GetComponent<Dirt>();
+            if (dirt != null && !isMining)
             {
                 isMining = true;
                 // Start mining the dirt
                 Debug.Log("FoundDirt");
-                animator.SetBool("Mining",true);
+                animator.SetBool("Mining", true);
+                DamageDirt(dirt);
                 yield return new WaitForSeconds(miningRate);
-                DamageDirt();
                 isMining = false;
                 break;
             }
@@ -91,22 +88,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void StopMining()
+    private void DamageDirt(Dirt dirt)
     {
-        if (currentDirt != null)
+        if (dirt != null)
         {
-            // Stop mining and restore the dirt
-            CancelInvoke("DamageDirt");
-            currentDirt.Restore();
-        }
-        animator.SetBool("Mining", false);
-    }
-
-    private void DamageDirt()
-    {
-        if (currentDirt != null)
-        {
-            currentDirt.Damage();
+            dirt.Damage();
         }
     }
 }

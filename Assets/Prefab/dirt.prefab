@@ -102,8 +102,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c84c3b811b34c26458ee178ee1f994b4, type: 3}
   - {fileID: 21300000, guid: 57b236519b803e44f844a9336611b552, type: 3}
   - {fileID: 21300000, guid: 8c1c21aa05579634e912f755f5dc3af3, type: 3}
-  gemPrefabs: []
-  maxToughNess: 0
+  gemPrefabs:
+  - {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
+  - {fileID: 10345425572692979, guid: 11395b3cd59a2374c9d29eb130530f34, type: 3}
+  maxToughNess: 10
 --- !u!61 &-748616512334488220
 BoxCollider2D:
   m_ObjectHideFlags: 0
