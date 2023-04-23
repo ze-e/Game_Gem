@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
 
     //Mine
     bool isMining = false;
+    bool canMine = true;
+    public float miningSpeed = 3f;
 
     private void Start()
     {
@@ -20,9 +22,15 @@ public class PlayerController : MonoBehaviour
     {
         if(!isMining) Move();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
-            if(!isMining) Mine();
+            animator.SetBool("Mining", true);
+            isMining = true;
+            
+            if (canMine)
+            {
+                Mine();
+            }
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -64,31 +72,27 @@ public class PlayerController : MonoBehaviour
     void Mine()
     {
         // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.25f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
         foreach (Collider2D collider in colliders)
         {
             Dirt dirt = collider.GetComponent<Dirt>();
-            if (dirt != null && !isMining)
+            if (dirt != null)
             {
                 // Start mining the dirt
-                isMining = true;
-                animator.SetBool("Mining", true);
-                StartCoroutine(MineCoroutine(dirt));
+                StartCoroutine(CooldownCoroutine(miningSpeed, canMine, DamageDirt, dirt));
                 break;
             }
         }
     }
 
-    private IEnumerator MineCoroutine(Dirt dirt)
+    IEnumerator CooldownCoroutine<T>(float delay, bool methodBool, System.Action<T> delayedMethod, T arg)
     {
-        while (isMining && dirt != null)
-        {
-            // Wait for the cooldown period
-            yield return new WaitForSeconds(3f);
-
-            // Damage the dirt
-            DamageDirt(dirt);
-        }
+        #pragma warning disable IDE0059 // Unnecessary assignment of a value
+        methodBool = false;
+        yield return new WaitForSeconds(delay);
+        delayedMethod(arg);
+        methodBool = true;
+        #pragma warning restore IDE0059 // Unnecessary assignment of a value
     }
 
     private void DamageDirt(Dirt dirt)

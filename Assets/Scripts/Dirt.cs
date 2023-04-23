@@ -7,27 +7,31 @@ public class Dirt : MonoBehaviour
     public Sprite[] sprites;
     public GameObject[] gemPrefabs;
 
-    public int maxToughNess;
+    public GameObject dirtSprite;
+    
+    public int toughness;
     public int maxLuck;
     int luck;
-    int toughness;
+    int maxHealth;
     int health;
 
     void Start()
     {
         SetSprite();
-        toughness = Random.Range(0, maxToughNess);
-        luck = Random.Range(0, maxLuck);
+        maxHealth = Random.Range(1, toughness);
+        luck = Random.Range(1, maxLuck);
     }
 
     void SetSprite()
     {
+
         // Select a random sprite from the array
         int index = Random.Range(0, sprites.Length);
-        Sprite sprite = sprites[index];
+        Sprite chosenSprite = sprites[index];
 
         // Apply the sprite to the object
-        GetComponent<SpriteRenderer>().sprite = sprite;
+        SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = chosenSprite;
 
         // Randomly flip or rotate the sprite
         bool flipX = Random.value < 0.5f;
@@ -46,17 +50,27 @@ public class Dirt : MonoBehaviour
         transform.localScale = scale;
 
         transform.Rotate(new Vector3(0, 0, rotation));
+
+        // reset opacity
+        Color newColor = spriteRenderer.color;
+        newColor.a = 1;
+        spriteRenderer.color = newColor;
     }
 
     public void Damage()
     {
+        // reduce health
         health--;
-        if (health < 1) DestroyDirt();
-    }
 
-    public void Restore()
-    {
-        health = toughness;
+        // Reduce opacity of SpriteRenderer based on remaining health
+        SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
+        float opacity = (float)health / (float)maxHealth;
+        Color newSpriteColor = spriteRenderer.color;
+        newSpriteColor.a = Mathf.Abs(opacity);
+        spriteRenderer.color = newSpriteColor;
+
+        //destroy when run out of health
+        if (health < 1) DestroyDirt();
     }
 
     void DestroyDirt()
@@ -77,7 +91,7 @@ public class Dirt : MonoBehaviour
     void SpawnNewDirt()
     {
         GameObject newDirt = Instantiate(gameObject, transform.position, Quaternion.identity);
-        newDirt.GetComponent<Dirt>().maxToughNess = maxToughNess;
+        newDirt.GetComponent<Dirt>().toughness = toughness;
         newDirt.GetComponent<Dirt>().maxLuck = maxLuck;
     }
 }
