@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
     void Mine()
     {
         // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.25f);
         foreach (Collider2D collider in colliders)
         {
             Dirt dirt = collider.GetComponent<Dirt>();

@@ -70,6 +70,14 @@ public class Dirt : MonoBehaviour
                 Instantiate(gemPrefabs[chosenGem], transform.position, Quaternion.identity);
             }
         }
+        SpawnNewDirt();
         Destroy(gameObject);
+    }
+
+    void SpawnNewDirt()
+    {
+        GameObject newDirt = Instantiate(gameObject, transform.position, Quaternion.identity);
+        newDirt.GetComponent<Dirt>().maxToughNess = maxToughNess;
+        newDirt.GetComponent<Dirt>().maxLuck = maxLuck;
     }
 }
