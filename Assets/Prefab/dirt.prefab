@@ -106,6 +106,7 @@ MonoBehaviour:
   - {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
   - {fileID: 10345425572692979, guid: 11395b3cd59a2374c9d29eb130530f34, type: 3}
   maxToughNess: 10
+  maxLuck: 20
 --- !u!61 &-748616512334488220
 BoxCollider2D:
   m_ObjectHideFlags: 0

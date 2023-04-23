@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     //Mine
-    public float miningRate = 1f; 
     bool isMining = false;
 
     private void Start()
@@ -23,11 +22,12 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(!isMining) StartCoroutine(Mine());
+            if(!isMining) Mine();
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
             animator.SetBool("Mining", false);
+            isMining = false;
         }
     }
 
@@ -61,9 +61,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator Mine()
+    void Mine()
     {
-        Debug.Log("Mining");
         // Check if there is dirt at the player's position
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
         foreach (Collider2D collider in colliders)
@@ -71,20 +70,24 @@ public class PlayerController : MonoBehaviour
             Dirt dirt = collider.GetComponent<Dirt>();
             if (dirt != null && !isMining)
             {
-                isMining = true;
                 // Start mining the dirt
-                Debug.Log("FoundDirt");
+                isMining = true;
                 animator.SetBool("Mining", true);
-                DamageDirt(dirt);
-                yield return new WaitForSeconds(miningRate);
-                isMining = false;
+                StartCoroutine(MineCoroutine(dirt));
                 break;
             }
-            else
-            {
-                isMining = false;
-                animator.SetBool("Mining", false);
-            }
+        }
+    }
+
+    private IEnumerator MineCoroutine(Dirt dirt)
+    {
+        while (isMining && dirt != null)
+        {
+            // Wait for the cooldown period
+            yield return new WaitForSeconds(3f);
+
+            // Damage the dirt
+            DamageDirt(dirt);
         }
     }
 

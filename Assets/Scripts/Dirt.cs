@@ -8,6 +8,8 @@ public class Dirt : MonoBehaviour
     public GameObject[] gemPrefabs;
 
     public int maxToughNess;
+    public int maxLuck;
+    int luck;
     int toughness;
     int health;
 
@@ -15,6 +17,7 @@ public class Dirt : MonoBehaviour
     {
         SetSprite();
         toughness = Random.Range(0, maxToughNess);
+        luck = Random.Range(0, maxLuck);
     }
 
     void SetSprite()
@@ -58,11 +61,15 @@ public class Dirt : MonoBehaviour
 
     void DestroyDirt()
     {
-        int chooseGem = Random.Range(0, gemPrefabs.Length + 1);
-        if (chooseGem < gemPrefabs.Length + 1)
+        int pull = Random.Range(0, luck);
+        if (pull == 1)
         {
-           Instantiate(gemPrefabs[chooseGem], transform.position, Quaternion.identity);
+            int chosenGem = Random.Range(0, gemPrefabs.Length);
+            if (chosenGem < gemPrefabs.Length)
+            {
+                Instantiate(gemPrefabs[chosenGem], transform.position, Quaternion.identity);
+            }
         }
-        Destroy(this);
+        Destroy(gameObject);
     }
 }
