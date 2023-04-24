@@ -24,7 +24,7 @@ public class Dirt : MonoBehaviour
         SetSprite();
         maxHealth = Random.Range(maxHealth / 2 + 1, toughness);
         health = maxHealth;
-        luck = Random.Range(1, maxLuck);
+        luck = Random.Range(maxLuck/2 + 1, maxLuck);
     }
 
     void SetSprite()
@@ -91,24 +91,20 @@ public class Dirt : MonoBehaviour
             {
                 child.gameObject.GetComponentInChildren<TMP_Text>().text = health.ToString();
             }
-            //if (child.gameObject.name == "maxHealth" && maxHealth > 0)
-            //{
-            //    child.gameObject.GetComponentInChildren<TMP_Text>().text = maxHealth.ToString();
-            //}
         }
     }
 
     void DestroyDirt()
     {
-        //int pull = Random.Range(0, luck);
-        //if (pull == 1)
-        //{
+        int pull = Random.Range(0, luck);
+        if (pull == 1)
+        {
             int chosenGem = Random.Range(0, gemPrefabs.Length);
             if (chosenGem < gemPrefabs.Length)
             {
                 Instantiate(gemPrefabs[chosenGem], transform.position, Quaternion.identity);
             }
-        //}
+        }
         SpawnEmptyGridSpace();
         Destroy(gameObject);
     }

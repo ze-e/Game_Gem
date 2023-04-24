@@ -135,14 +135,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8c1c21aa05579634e912f755f5dc3af3, type: 3}
   gemPrefabs:
   - {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
-  - {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
-  - {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
-  - {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
+  - {fileID: 3306948186543017077, guid: 477005017f2a1584eb5c59bc8320b0a0, type: 3}
+  - {fileID: 3306948186543017077, guid: 366d01bd80b51414fa49226bb5961490, type: 3}
   gridSpacePrefab: {fileID: 5348431766348307753, guid: a8e9ac489acae934a84812dfb671aa8b, type: 3}
   dirtSprite: {fileID: 2557630611694647494}
   healthText: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}
   toughness: 50
-  maxLuck: 10
+  maxLuck: 3
 --- !u!61 &-748616512334488220
 BoxCollider2D:
   m_ObjectHideFlags: 0

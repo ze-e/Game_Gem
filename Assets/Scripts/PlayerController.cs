@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
     // Move
-    public float speed = 5f;
+    private float _speed = 5f;
+    public float speed { get { return _speed; } set { _speed = value; } }
     protected Animator animator;
 
     //Mine
     bool isMining = false;
-    public float miningSpeed = 3f;
+    private float _miningSpeed = 3f;
+    public float miningSpeed { get { return _miningSpeed; } set { _miningSpeed = value; } }
+
 
     //throttle
     protected int throttle = 0;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RivalController : PlayerController
+public class RivalController : PlayerController, IController
 {
     // state
     enum RivalState {Idle, Check, Mine, FollowGem, Walk}
@@ -47,29 +47,15 @@ public class RivalController : PlayerController
                     Mine();
                     break;
                 case RivalState.FollowGem:
-                    FollowGem();
+                    Follow("Gem");
                     break;
                 case RivalState.Walk:
-                    Walk();
+                    Follow("Dirt");
                     break;
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Gem"))
-        {
-            GameObject gem = collision.gameObject; 
-
-
-            // Set RivalScore to 100
-            Manager.Instance.AddRivalScore(gem.GetComponent<Gem>().score);
-            Destroy(gem);
-
-            currentState = RivalState.Idle;
-        }
-    }
 
     void SetRandomColor()
     {
@@ -90,57 +76,6 @@ public class RivalController : PlayerController
         }
         if (HasGem()) currentState = RivalState.FollowGem;
         else currentState = RivalState.Idle;
-    }
-
-    void FollowGem()
-    {
-        animator.SetBool("Walking", true);
-        if (target != null)
-        {
-            // Move towards the target at the specified speed
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-
-            // Check if the target has been reached
-            if (transform.position == target.transform.position)
-            {
-                // Set target to null
-                target = null;
-                animator.SetBool("Walking", false);
-                currentState = RivalState.Idle;
-            }
-        }
-        else GetTargetGem();
-    }
-
-    private void GetTargetGem()
-    {
-        // Find all GameObjects with the tag "Gem"
-        GameObject[] gems = GameObject.FindGameObjectsWithTag("Gem");
-
-        // If there are no Gems, return
-        if (gems.Length == 0)
-        {
-            currentState = RivalState.Idle;
-            return;
-        }
-
-        // Set the first Gem as the initial target
-        GameObject nearestGem =  gems[0];
-        float nearestDistance = Vector2.Distance(transform.position, nearestGem.transform.position);
-
-        // Loop through all Gems to find the nearest one
-        for (int i = 1; i < gems.Length; i++)
-        {
-            float distance = Vector2.Distance(transform.position, gems[i].transform.position);
-            if (distance < nearestDistance)
-            {
-                nearestGem = gems[i];
-                nearestDistance = distance;
-            }
-        }
-
-        // Set the nearest Gem as the target
-        target = nearestGem;
     }
 
     bool HasDirt()
@@ -204,8 +139,9 @@ public class RivalController : PlayerController
             }
         }
     }
+    
 
-    void Walk()
+    void Follow(string tag)
     {
         animator.SetBool("Walking", true);
         if (target != null)
@@ -223,33 +159,33 @@ public class RivalController : PlayerController
                 currentState = RivalState.Idle;
             }
         }
-        else GetTargetDirt();
+        else GetTarget(tag);
     }
 
-    private void GetTargetDirt()
+    void GetTarget(string tag)
     {
-        GameObject[] dirt = GameObject.FindGameObjectsWithTag("Dirt");
+        GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
 
-        if (dirt.Length == 0)
+        if (targets.Length == 0)
         {
             currentState = RivalState.Idle;
             return;
         }
 
-        GameObject nearestGem = dirt[0];
-        float nearestDistance = Vector2.Distance(transform.position, nearestGem.transform.position);
+        GameObject nearest = targets[0];
+        float nearestDistance = Vector2.Distance(transform.position, nearest.transform.position);
 
-        for (int i = 1; i < dirt.Length; i++)
+        for (int i = 1; i < targets.Length; i++)
         {
-            float distance = Vector2.Distance(transform.position, dirt[i].transform.position);
+            float distance = Vector2.Distance(transform.position, targets[i].transform.position);
             if (distance < nearestDistance)
             {
-                nearestGem = dirt[i];
+                nearest = targets[i];
                 nearestDistance = distance;
             }
         }
 
-        target = nearestGem;
+        target = nearest;
     }
 
     #region sprite
