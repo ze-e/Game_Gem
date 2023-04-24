@@ -7,15 +7,15 @@ public class PlayerController : MonoBehaviour
 {
     // Move
     public float speed = 5f;
-    private Animator animator;
+    protected Animator animator;
 
     //Mine
     bool isMining = false;
     public float miningSpeed = 3f;
 
     //throttle
-    int throttle = 0;
-    int throttleBy = 100;
+    protected int throttle = 0;
+    protected int throttleBy = 100;
 
     private void Start()
     {
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    bool Throttled(float speed)
+    protected bool Throttled(float speed)
     {
         return throttle % throttleBy * speed == 0;
     }
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private void DamageDirt(Dirt dirt)
+    protected void DamageDirt(Dirt dirt)
     {
         if (dirt != null)
         {

@@ -83,7 +83,6 @@ public class Dirt : MonoBehaviour
 
     void ShowHealthText()
     {
-        Debug.Log(maxHealth);
         Instantiate(healthText, transform.position, Quaternion.identity);
         Transform[] children = healthText.GetComponentsInChildren<Transform>();
         foreach (var child in children)

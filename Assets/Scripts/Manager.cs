@@ -6,6 +6,7 @@ public class Manager : MonoBehaviour
 {
     public static Manager Instance { get; private set; }
     public int Score { get; private set; }
+    public int RivalScore { get; private set; }
 
     private void Awake()
     {
@@ -21,11 +22,18 @@ public class Manager : MonoBehaviour
 
     void Start()
     {
-        Score = 0;    
+        Score = 0;
+        RivalScore = 0;    
     }
 
     public void AddScore(int num)
     {
         Score += num;
+    }
+
+    public void AddRivalScore(int num)
+    {
+        RivalScore += num;
+        Debug.Log("RivalScore" + RivalScore);
     }
 }
