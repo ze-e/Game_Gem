@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -72,16 +73,16 @@ public class PlayerController : MonoBehaviour
 
     void Mine()
     {
-        // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
-        foreach (Collider2D collider in colliders)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
+        if (hit.collider != null)
         {
-            Dirt dirt = collider.GetComponent<Dirt>();
+            Debug.Log("hit" + hit.collider.name);
+            Dirt dirt = hit.collider.GetComponent<Dirt>();
+
             if (dirt != null)
             {
                 // Start mining the dirt
                 StartCoroutine(CooldownCoroutine(miningSpeed, canMine, DamageDirt, dirt));
-                break;
             }
         }
     }

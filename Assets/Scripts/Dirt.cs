@@ -8,6 +8,7 @@ public class Dirt : MonoBehaviour
     public Sprite[] sprites;
     public GameObject[] gemPrefabs;
 
+    public GameObject gridSpacePrefab;
     public GameObject dirtSprite;
     public GameObject healthText;
 
@@ -21,6 +22,7 @@ public class Dirt : MonoBehaviour
     {
         SetSprite();
         maxHealth = Random.Range(1, toughness);
+        //health = maxHealth;
         luck = Random.Range(1, maxLuck);
     }
 
@@ -61,20 +63,22 @@ public class Dirt : MonoBehaviour
 
     public void Damage()
     {
-        // reduce health
-        health--;
-        if (health < 1) health = 0;
-        ShowHealthText();
+ 
+            // reduce health
+            //health--;
+            //if (health < 1) health = 0;
+            //ShowHealthText();
 
-        // Reduce opacity of SpriteRenderer based on remaining health
-        SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
-        float opacity = (float)health / (float)maxHealth;
-        Color newSpriteColor = spriteRenderer.color;
-        newSpriteColor.a = Mathf.Abs(opacity);
-        spriteRenderer.color = newSpriteColor;
+            //// Reduce opacity of SpriteRenderer based on remaining health
+            //SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
+            //float opacity = (float)health / (float)maxHealth;
+            //Color newSpriteColor = spriteRenderer.color;
+            //newSpriteColor.a = Mathf.Abs(opacity);
+            //spriteRenderer.color = newSpriteColor;
 
-        //destroy when run out of health
-        if (health == 0) DestroyDirt();
+            //destroy when run out of health
+            //if (health == 0) DestroyDirt();
+            DestroyDirt();
     }
 
     void ShowHealthText()
@@ -105,14 +109,36 @@ public class Dirt : MonoBehaviour
                 Instantiate(gemPrefabs[chosenGem], transform.position, Quaternion.identity);
             }
         }
-        SpawnNewDirt();
+        SpawnEmptyGridSpace();
         Destroy(gameObject);
     }
 
-    void SpawnNewDirt()
+    void SpawnEmptyGridSpace()
     {
-        GameObject newDirt = Instantiate(gameObject, transform.position, Quaternion.identity);
-        newDirt.GetComponent<Dirt>().toughness = toughness;
-        newDirt.GetComponent<Dirt>().maxLuck = maxLuck;
+        Instantiate(gridSpacePrefab, transform.position, Quaternion.identity);
     }
+
+    #region oldMethods
+    //void DisableDirt()
+    //{
+    //    Collider2D collider = GetComponent<Collider2D>();
+    //    SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+    //    Destroy(collider);
+    //    Destroy(renderer);
+    //}
+
+    //void SpawnNewDirt()
+    //{
+    //    GameObject newDirt = Instantiate(gameObject, transform.position, Quaternion.identity);
+    //    newDirt.GetComponent<Dirt>().toughness = toughness;
+    //    newDirt.GetComponent<Dirt>().maxLuck = maxLuck;
+    //    Destroy(gameObject);
+    //}
+
+    //private IEnumerator CallbackCoroutine(float delayInSeconds, System.Action methodToCall)
+    //{
+    //    yield return new WaitForSeconds(delayInSeconds);
+    //    methodToCall?.Invoke();
+    //}
+    #endregion oldMethods
 }

@@ -19,7 +19,6 @@ public class Gem : MonoBehaviour
     {
         PickUpText();
         Manager.Instance.AddScore(score);
-        Debug.Log(score);
         Destroy(gameObject);
     }
 
