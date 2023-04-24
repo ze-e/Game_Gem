@@ -22,7 +22,7 @@ public class Dirt : MonoBehaviour
     {
         SetSprite();
         maxHealth = Random.Range(1, toughness);
-        //health = maxHealth;
+        health = maxHealth;
         luck = Random.Range(1, maxLuck);
     }
 
@@ -63,22 +63,23 @@ public class Dirt : MonoBehaviour
 
     public void Damage()
     {
- 
-            // reduce health
-            //health--;
-            //if (health < 1) health = 0;
-            //ShowHealthText();
 
-            //// Reduce opacity of SpriteRenderer based on remaining health
-            //SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
-            //float opacity = (float)health / (float)maxHealth;
-            //Color newSpriteColor = spriteRenderer.color;
-            //newSpriteColor.a = Mathf.Abs(opacity);
-            //spriteRenderer.color = newSpriteColor;
+        // reduce health
+        //health--;
+        //if (health < 1) health = 0;
+        //Debug.Log("health" + health);
+        //ShowHealthText();
 
-            //destroy when run out of health
-            //if (health == 0) DestroyDirt();
-            DestroyDirt();
+        //// Reduce opacity of SpriteRenderer based on remaining health
+        //SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
+        //float opacity = (float)health / (float)maxHealth;
+        //Color newSpriteColor = spriteRenderer.color;
+        //newSpriteColor.a = Mathf.Abs(opacity);
+        //spriteRenderer.color = newSpriteColor;
+
+        //destroy when run out of health
+        //if (health == 0) DestroyDirt();
+        DestroyDirt();
     }
 
     void ShowHealthText()

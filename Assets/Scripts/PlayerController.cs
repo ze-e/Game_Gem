@@ -11,24 +11,32 @@ public class PlayerController : MonoBehaviour
 
     //Mine
     bool isMining = false;
-    bool canMine = true;
     public float miningSpeed = 3f;
+
+    //throttle
+    int throttle = 0;
+    int throttleBy = 100;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
     }
 
+
     private void Update()
     {
-        if(!isMining) Move();
+        // throttler to avoid retriggering events
+        throttle++;
+        if (throttle == throttleBy * 10) throttle = 0;
+
+        if (!isMining) Move();
 
         if (Input.GetKey(KeyCode.Space))
         {
             animator.SetBool("Mining", true);
             isMining = true;
-            
-            if (canMine)
+
+            if (Throttled(miningSpeed))
             {
                 Mine();
             }
@@ -39,6 +47,11 @@ public class PlayerController : MonoBehaviour
             isMining = false;
             StopCoroutine("CooldownCoroutine");
         }
+    }
+
+    bool Throttled(float speed)
+    {
+        return throttle % throttleBy * speed == 0;
     }
 
     void Move()
@@ -76,17 +89,36 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
         if (hit.collider != null)
         {
-            Debug.Log("hit" + hit.collider.name);
             Dirt dirt = hit.collider.GetComponent<Dirt>();
-
+            
             if (dirt != null)
             {
                 // Start mining the dirt
-                StartCoroutine(CooldownCoroutine(miningSpeed, canMine, DamageDirt, dirt));
+                DamageDirt(dirt);
             }
         }
     }
 
+
+
+    private void DamageDirt(Dirt dirt)
+    {
+        if (dirt != null)
+        {
+            dirt.Damage();
+        }
+    }
+
+    #region utility
+
+    #endregion
+
+    #region deprecated
+    IEnumerator DelayCoroutine<T>(float delay, System.Action<T> delayedMethod, T arg)
+    {
+        yield return new WaitForSeconds(delay);
+        delayedMethod(arg);
+    }
     IEnumerator CooldownCoroutine<T>(float delay, bool methodBool, System.Action<T> delayedMethod, T arg)
     {
         #pragma warning disable IDE0059 // Unnecessary assignment of a value
@@ -96,12 +128,5 @@ public class PlayerController : MonoBehaviour
         methodBool = true;
         #pragma warning restore IDE0059 // Unnecessary assignment of a value
     }
-
-    private void DamageDirt(Dirt dirt)
-    {
-        if (dirt != null)
-        {
-            dirt.Damage();
-        }
-    }
+    #endregion deprecated
 }
