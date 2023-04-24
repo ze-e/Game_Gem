@@ -35,10 +35,13 @@ public class RivalController : PlayerController
                     Check();
                     break;
                 case RivalState.Mine:
-                    RivalMine();
+                    Mine();
                     break;
                 case RivalState.FollowGem:
                     FollowGem();
+                    break;
+                case RivalState.Walk:
+                    Walk();
                     break;
             }
         }
@@ -71,13 +74,18 @@ public class RivalController : PlayerController
 
     void Check()
     {
-        if(HasDirt()) currentState = RivalState.Mine;
+        if (HasDirt())
+        {
+            animator.SetBool("Mining", true);
+            currentState = RivalState.Mine;
+        }
         if (HasGem()) currentState = RivalState.FollowGem;
         else currentState = RivalState.Idle;
     }
 
     void FollowGem()
     {
+        animator.SetBool("Walking", true);
         if (target != null)
         {
             // Move towards the target at the specified speed
@@ -88,7 +96,7 @@ public class RivalController : PlayerController
             {
                 // Set target to null
                 target = null;
-
+                animator.SetBool("Walking", false);
                 currentState = RivalState.Idle;
             }
         }
@@ -172,7 +180,7 @@ public class RivalController : PlayerController
         return false;
     }
 
-    void RivalMine()
+    void Mine()
     {
         if (Throttled(speed * 3) && !HasDirt()) { 
             currentState = RivalState.Check; 
@@ -184,12 +192,58 @@ public class RivalController : PlayerController
             if (dirt != null)
             {
                 DamageDirt(dirt);
-                animator.SetBool("Mining", true);
             }
         }
     }
 
-     #region utility
+    void Walk()
+    {
+        animator.SetBool("Walking", true);
+        if (target != null)
+        {
+            // Move towards the target at the specified speed
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+
+            // Check if the target has been reached
+            if (transform.position == target.transform.position)
+            {
+                // Set target to null
+                target = null;
+
+                animator.SetBool("Walking", false);
+                currentState = RivalState.Idle;
+            }
+        }
+        else GetTargetDirt();
+    }
+
+    private void GetTargetDirt()
+    {
+        GameObject[] dirt = GameObject.FindGameObjectsWithTag("Dirt");
+
+        if (dirt.Length == 0)
+        {
+            currentState = RivalState.Idle;
+            return;
+        }
+
+        GameObject nearestGem = dirt[0];
+        float nearestDistance = Vector2.Distance(transform.position, nearestGem.transform.position);
+
+        for (int i = 1; i < dirt.Length; i++)
+        {
+            float distance = Vector2.Distance(transform.position, dirt[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                nearestGem = dirt[i];
+                nearestDistance = distance;
+            }
+        }
+
+        target = nearestGem;
+    }
+
+    #region utility
 
     #endregion
 

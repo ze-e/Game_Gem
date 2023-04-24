@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: -748616512334488220}
   m_Layer: 0
   m_Name: dirt
-  m_TagString: Untagged
+  m_TagString: Dirt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   dirtSprite: {fileID: 2557630611694647494}
   healthText: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}
   toughness: 50
-  maxLuck: 10
+  maxLuck: 1
 --- !u!61 &-748616512334488220
 BoxCollider2D:
   m_ObjectHideFlags: 0

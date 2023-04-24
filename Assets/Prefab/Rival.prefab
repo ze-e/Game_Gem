@@ -164,7 +164,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593e13f6f3275cf46a1c1365b0589a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  miningSpeed: 3
-  speed: 5
+  speed: 50
   miningSpeed: 3
