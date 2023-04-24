@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Mining", false);
             isMining = false;
+            StopCoroutine("CooldownCoroutine");
         }
     }
 

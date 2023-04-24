@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class Dirt : MonoBehaviour
 {
@@ -85,11 +85,11 @@ public class Dirt : MonoBehaviour
         {
             if (child.gameObject.name == "health")
             {
-                child.gameObject.GetComponentInChildren<TMP_Text>().text = health.ToString();
+                child.gameObject.GetComponentInChildren<Text>().text = health.ToString();
             }
             if (child.gameObject.name == "maxHealth")
             {
-                child.gameObject.GetComponentInChildren<TMP_Text>().text = maxHealth.ToString();
+                child.gameObject.GetComponentInChildren<Text>().text = maxHealth.ToString();
             }
         }
     }
