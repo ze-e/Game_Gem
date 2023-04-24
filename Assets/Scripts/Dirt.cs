@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Dirt : MonoBehaviour
 {
@@ -14,14 +15,14 @@ public class Dirt : MonoBehaviour
 
     public int toughness;
     public int maxLuck;
-    int luck;
     int maxHealth;
+    int luck;
     int health;
 
     void Start()
     {
         SetSprite();
-        maxHealth = Random.Range(1, toughness);
+        maxHealth = Random.Range(maxHealth / 2 + 1, toughness);
         health = maxHealth;
         luck = Random.Range(1, maxLuck);
     }
@@ -63,38 +64,37 @@ public class Dirt : MonoBehaviour
 
     public void Damage()
     {
+        if (health > 0)
+        {
+            // reduce health
+            health--;
+            if (health < 1) health = 0;
+            ShowHealthText();
 
-        // reduce health
-        //health--;
-        //if (health < 1) health = 0;
-        //Debug.Log("health" + health);
-        //ShowHealthText();
-
-        //// Reduce opacity of SpriteRenderer based on remaining health
-        //SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
-        //float opacity = (float)health / (float)maxHealth;
-        //Color newSpriteColor = spriteRenderer.color;
-        //newSpriteColor.a = Mathf.Abs(opacity);
-        //spriteRenderer.color = newSpriteColor;
-
+            // Reduce opacity of SpriteRenderer based on remaining health
+            SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
+            Debug.Log(spriteRenderer);
+            float opacity = (float)health / (float)maxHealth;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Abs(opacity));
+        }
         //destroy when run out of health
-        //if (health == 0) DestroyDirt();
-        DestroyDirt();
+        else if (health == 0) DestroyDirt();
     }
 
     void ShowHealthText()
     {
+        Debug.Log(maxHealth);
         Instantiate(healthText, transform.position, Quaternion.identity);
         Transform[] children = healthText.GetComponentsInChildren<Transform>();
         foreach (var child in children)
         {
-            if (child.gameObject.name == "health")
+            if (child.gameObject.name == "health" && health > 0)
             {
-                child.gameObject.GetComponentInChildren<Text>().text = health.ToString();
+                child.gameObject.GetComponentInChildren<TMP_Text>().text = health.ToString();
             }
-            if (child.gameObject.name == "maxHealth")
+            if (child.gameObject.name == "maxHealth" && maxHealth > 0)
             {
-                child.gameObject.GetComponentInChildren<Text>().text = maxHealth.ToString();
+                child.gameObject.GetComponentInChildren<TMP_Text>().text = maxHealth.ToString();
             }
         }
     }
@@ -119,27 +119,4 @@ public class Dirt : MonoBehaviour
         Instantiate(gridSpacePrefab, transform.position, Quaternion.identity);
     }
 
-    #region oldMethods
-    //void DisableDirt()
-    //{
-    //    Collider2D collider = GetComponent<Collider2D>();
-    //    SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-    //    Destroy(collider);
-    //    Destroy(renderer);
-    //}
-
-    //void SpawnNewDirt()
-    //{
-    //    GameObject newDirt = Instantiate(gameObject, transform.position, Quaternion.identity);
-    //    newDirt.GetComponent<Dirt>().toughness = toughness;
-    //    newDirt.GetComponent<Dirt>().maxLuck = maxLuck;
-    //    Destroy(gameObject);
-    //}
-
-    //private IEnumerator CallbackCoroutine(float delayInSeconds, System.Action methodToCall)
-    //{
-    //    yield return new WaitForSeconds(delayInSeconds);
-    //    methodToCall?.Invoke();
-    //}
-    #endregion oldMethods
 }

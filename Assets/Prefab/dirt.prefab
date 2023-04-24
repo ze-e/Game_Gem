@@ -221,9 +221,8 @@ MonoBehaviour:
   gridSpacePrefab: {fileID: 5348431766348307753, guid: a8e9ac489acae934a84812dfb671aa8b, type: 3}
   dirtSprite: {fileID: 2557630611694647494}
   healthText: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}
-  toughness: 100
-  maxLuck: 20
-  maxRespawnRate: 10
+  toughness: 50
+  maxLuck: 10
 --- !u!61 &-748616512334488220
 BoxCollider2D:
   m_ObjectHideFlags: 0

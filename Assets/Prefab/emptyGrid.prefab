@@ -154,4 +154,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToSpawn: {fileID: 5348431766348307753, guid: 9e0b3c86ac31fc7449131649c7efb320, type: 3}
-  maxSeconds: 10
+  maxSeconds: 100
