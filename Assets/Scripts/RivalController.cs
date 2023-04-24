@@ -9,14 +9,23 @@ public class RivalController : PlayerController
     enum RivalState {Idle, Check, Mine, FollowGem, Walk}
     RivalState currentState;
     GameObject target;
+    SpriteRenderer spriteRenderer;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         SetRandomColor();
         currentState = RivalState.Idle;
     }
 
+    private void FixedUpdate()
+    {
+        if (target != null)
+        {
+            HandleSprite();
+        }
+    }
 
     private void Update()
     {
@@ -242,6 +251,23 @@ public class RivalController : PlayerController
 
         target = nearestGem;
     }
+
+    #region sprite
+
+    void HandleSprite () {
+        Vector2 currentPosition = transform.position;
+
+        if (currentPosition.x < target.transform.position.x)
+        {
+            spriteRenderer.flipX = false; // face right
+        }
+        else if (currentPosition.x > target.transform.position.x)
+        {
+            spriteRenderer.flipX = true; // face left
+        }
+    }
+
+    #endregion
 
     #region utility
 

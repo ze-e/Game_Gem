@@ -34,6 +34,5 @@ public class Manager : MonoBehaviour
     public void AddRivalScore(int num)
     {
         RivalScore += num;
-        Debug.Log("RivalScore" + RivalScore);
     }
 }

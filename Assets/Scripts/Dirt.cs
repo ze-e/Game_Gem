@@ -100,15 +100,15 @@ public class Dirt : MonoBehaviour
 
     void DestroyDirt()
     {
-        int pull = Random.Range(0, luck);
-        if (pull == 1)
-        {
+        //int pull = Random.Range(0, luck);
+        //if (pull == 1)
+        //{
             int chosenGem = Random.Range(0, gemPrefabs.Length);
             if (chosenGem < gemPrefabs.Length)
             {
                 Instantiate(gemPrefabs[chosenGem], transform.position, Quaternion.identity);
             }
-        }
+        //}
         SpawnEmptyGridSpace();
         Destroy(gameObject);
     }
