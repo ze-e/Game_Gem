@@ -92,10 +92,10 @@ public class Dirt : MonoBehaviour
             {
                 child.gameObject.GetComponentInChildren<TMP_Text>().text = health.ToString();
             }
-            if (child.gameObject.name == "maxHealth" && maxHealth > 0)
-            {
-                child.gameObject.GetComponentInChildren<TMP_Text>().text = maxHealth.ToString();
-            }
+            //if (child.gameObject.name == "maxHealth" && maxHealth > 0)
+            //{
+            //    child.gameObject.GetComponentInChildren<TMP_Text>().text = maxHealth.ToString();
+            //}
         }
     }
 
