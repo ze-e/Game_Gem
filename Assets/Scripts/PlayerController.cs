@@ -6,13 +6,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, IController
 {
     // Move
-    private float _speed = 5f;
+    public float _speed = 5f;
     public float speed { get { return _speed; } set { _speed = value; } }
     protected Animator animator;
 
     //Mine
     bool isMining = false;
-    private float _miningSpeed = 3f;
+    public float _miningSpeed = 3f;
     public float miningSpeed { get { return _miningSpeed; } set { _miningSpeed = value; } }
 
 

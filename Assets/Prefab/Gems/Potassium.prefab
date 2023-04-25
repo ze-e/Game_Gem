@@ -124,3 +124,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gemType: 1
   score: 200
+  gemText: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}

@@ -73,7 +73,6 @@ public class Dirt : MonoBehaviour
 
             // Reduce opacity of SpriteRenderer based on remaining health
             SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
-            Debug.Log(spriteRenderer);
             float opacity = (float)health / (float)maxHealth;
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Abs(opacity));
         }
@@ -87,9 +86,11 @@ public class Dirt : MonoBehaviour
         Transform[] children = healthText.GetComponentsInChildren<Transform>();
         foreach (var child in children)
         {
-            if (child.gameObject.name == "health" && health > 0)
+            if (child.gameObject.name == "text" && health > 0)
             {
-                child.gameObject.GetComponentInChildren<TMP_Text>().text = health.ToString();
+                var textObj = child.gameObject.GetComponentInChildren<TMP_Text>();
+                textObj.text = health.ToString();
+                textObj.color = Color.white;
             }
         }
     }

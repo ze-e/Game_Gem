@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public enum GemType { Sphene, Potassium, Sapphire };
 public interface IController
@@ -15,6 +16,8 @@ public class Gem : MonoBehaviour
     string gemName;
     public int score;
 
+    public GameObject gemText;
+
     private void Start()
     {
         gemName = gemType.ToString();
@@ -26,60 +29,48 @@ public class Gem : MonoBehaviour
         {
             PlayerController playerController = collider.gameObject.GetComponent<PlayerController>();
             RivalController rivalController = collider.gameObject.GetComponent<RivalController>();
-            Special(playerController != null ? playerController : rivalController);
-            PickUp(playerController != null);
+            GemEffect(collider.gameObject.name == "Player" ? playerController : rivalController);
+            PickUp(collider.gameObject.name == "Player");
         }
     }
 
-    void PickUp(bool rival)
+    void PickUp(bool player)
     {
-        PickUpText();
-        if(rival) Manager.Instance.AddScore(score);
+        if (player) Manager.Instance.AddScore(score);
         else Manager.Instance.AddRivalScore(score);
         Destroy(gameObject);
     }
 
  
 
-    void Special<T>(T controller) where T : MonoBehaviour, IController
+    void GemEffect<T>(T controller) where T : MonoBehaviour, IController
     {
         if (gemType == GemType.Potassium)
         {
             controller.miningSpeed += 1;
-            ShowText("Mining rate increased!", Color.green);
+            ShowText("\n Mining rate increased!", Color.green);
         }
-        if (gemType == GemType.Sapphire)
+        else if (gemType == GemType.Sapphire)
         {
             controller.speed += 1;
-            ShowText("Speed increased!", Color.blue) ;
+            ShowText("\n Speed increased!", Color.cyan);
         }
+        else ShowText("Picked Up:" + gemName, Color.white);
     }
 
-    void PickUpText()
-    {
-        ShowText("Picked Up:" + gemName);
-    }
-
-    void ShowText(string _text)
-    {
-        Debug.Log(_text);
-        GameObject actiontext = new GameObject();
-        actiontext.AddComponent<ActionText>();
-        actiontext.AddComponent<Text>();
-        actiontext.AddComponent<SpriteRenderer>();
-        actiontext.GetComponent<Text>().text = _text;
-        Instantiate(actiontext, transform.position, Quaternion.identity);
-    }
 
     void ShowText(string _text, Color _color)
     {
-        Debug.Log(_text);
-        GameObject actiontext = new GameObject();
-        actiontext.AddComponent<ActionText>();
-        actiontext.AddComponent<Text>();
-        actiontext.AddComponent<SpriteRenderer>();
-        actiontext.GetComponent<Text>().text = _text;
-        actiontext.GetComponent<Text>().color = _color;
-        Instantiate(actiontext, transform.position, Quaternion.identity);
+        var healthObj = Instantiate(gemText, transform.position, Quaternion.identity);
+        Transform[] children = healthObj.GetComponentsInChildren<Transform>();
+        foreach (var child in children)
+        {
+            if (child.gameObject.name == "text")
+            {
+                var textObj = child.gameObject.GetComponentInChildren<TMP_Text>();
+                textObj.text = _text;
+                textObj.color = _color;
+            }
+        }
     }
 }

@@ -122,5 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50bae84bf8797149a1edee2cf0e8d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gemName: Sphene
+  gemType: 0
   score: 100
+  gemText: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}

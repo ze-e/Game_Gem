@@ -39,7 +39,6 @@ public class Manager : MonoBehaviour
     {
         RivalScore += num;
         UpdateUIScore("RivalScore", "RivalScore:" + RivalScore);
-
     }
 
     public void UpdateUIScore(string key, string newVal)
