@@ -11,12 +11,16 @@ public class RivalController : PlayerController, IController
     GameObject target;
     SpriteRenderer spriteRenderer;
 
+    float maxHealth = 100f;
+    float health;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         SetRandomColor();
         currentState = RivalState.Idle;
+        health = maxHealth;
     }
 
     private void FixedUpdate()
@@ -186,6 +190,21 @@ public class RivalController : PlayerController, IController
         }
 
         target = nearest;
+    }
+
+    public void Damage(float amount)
+    {
+        health -= amount;
+        if (health < 1) Die();
+    }
+
+    void Die()
+    {
+        foreach(GameObject _gem in Gems)
+        {
+            Instantiate(_gem, transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
     }
 
     #region sprite

@@ -5,16 +5,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IController
 {
+    enum EquippedTypes { Pick, Machete, TNT }
+
     // Move
     public float _speed = 5f;
     public float speed { get { return _speed; } set { _speed = value; } }
     protected Animator animator;
 
-    //Mine
-    bool isMining = false;
+    // Mine
+    bool isUsingAction = false;
     public float _miningSpeed = 3f;
     public float miningSpeed { get { return _miningSpeed; } set { _miningSpeed = value; } }
 
+    // powerup
+    float cooldown = 60f;
+
+    // inventory
+    protected List<GameObject> Gems = new List<GameObject>();
+    List<EquippedTypes> equipment = new List<EquippedTypes> { EquippedTypes.Pick, EquippedTypes.Machete };
+    EquippedTypes primaryEquipped = EquippedTypes.Pick;
 
     //throttle
     protected int throttle = 0;
@@ -32,23 +41,15 @@ public class PlayerController : MonoBehaviour, IController
         throttle++;
         if (throttle == throttleBy * 10) throttle = 0;
 
-        if (!isMining) Move();
+        if (!isUsingAction) Move();
 
         if (Input.GetKey(KeyCode.Space))
         {
-            animator.SetBool("Mining", true);
-            isMining = true;
-
-            if (Throttled(miningSpeed))
-            {
-                Mine();
-            }
+            StartEquipped();
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            animator.SetBool("Mining", false);
-            isMining = false;
-            StopCoroutine("CooldownCoroutine");
+            StopEquipped();
         }
     }
 
@@ -87,6 +88,53 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
+    void StartEquipped()
+    {
+        isUsingAction = true;
+        switch (primaryEquipped)
+        {
+            case EquippedTypes.Pick:
+                animator.SetBool("Mining", true);
+
+                if (Throttled(miningSpeed))
+                {
+                    Mine();
+                }
+                break;
+
+            case EquippedTypes.Machete:
+                animator.SetBool("Attacking", true);
+
+                if (Throttled(miningSpeed))
+                {
+                    Attack();
+                }
+                break;
+        }
+    }
+
+    void StopEquipped()
+    {
+        isUsingAction = false;
+        switch (primaryEquipped)
+        {
+            case EquippedTypes.Pick:
+                animator.SetBool("Mining", false);
+                //StopCoroutine("CooldownCoroutine");
+                break;
+            case EquippedTypes.Machete:
+                animator.SetBool("Attacking", false);
+                break;
+        }
+    }
+
+    void ChangeEquipped()
+    {
+        int curIndex = equipment.IndexOf(primaryEquipped);
+        curIndex = (curIndex + 1) % equipment.Count;
+        primaryEquipped = equipment[curIndex];
+    }
+
     void Mine()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
@@ -102,7 +150,20 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
+    void Attack()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
+        if (hit.collider != null)
+        {
+            RivalController enemy = hit.collider.GetComponent<RivalController>();
 
+            if (enemy != null)
+            {
+                // Attack the enemy
+                enemy.Damage(.5f);
+            }
+        }
+    }
 
     protected void DamageDirt(Dirt dirt)
     {
@@ -111,6 +172,25 @@ public class PlayerController : MonoBehaviour, IController
             dirt.Damage();
         }
     }
+
+
+    public IEnumerator ResetStat(float stat, Color statColor)
+    {
+        float init = stat;
+        yield return new WaitForSeconds(cooldown);
+        stat = init;
+        Manager.Instance.ShowText(transform,"\n" + stat + " reset", statColor);
+        Debug.Log("\n" + stat + " reset");
+    }
+
+    #region inventory
+
+    public void AddGem(GameObject _item)
+    {
+        Gems.Add(_item);
+    }
+
+    #endregion
 
     #region utility
 
@@ -122,6 +202,8 @@ public class PlayerController : MonoBehaviour, IController
         yield return new WaitForSeconds(delay);
         delayedMethod(arg);
     }
+
+
     IEnumerator CooldownCoroutine<T>(float delay, bool methodBool, System.Action<T> delayedMethod, T arg)
     {
         #pragma warning disable IDE0059 // Unnecessary assignment of a value

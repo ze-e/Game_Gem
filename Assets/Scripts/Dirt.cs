@@ -69,7 +69,6 @@ public class Dirt : MonoBehaviour
             // reduce health
             health--;
             if (health < 1) health = 0;
-            ShowHealthText();
 
             // Reduce opacity of SpriteRenderer based on remaining health
             SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
@@ -80,21 +79,6 @@ public class Dirt : MonoBehaviour
         else if (health == 0) DestroyDirt();
     }
 
-    void ShowHealthText()
-    {
-
-        Instantiate(healthText, transform.position, Quaternion.identity);
-        Transform[] children = healthText.GetComponentsInChildren<Transform>();
-        foreach (var child in children)
-        {
-            if (child.gameObject.name == "text" && health > 0)
-            {
-                var textObj = child.gameObject.GetComponentInChildren<TMP_Text>();
-                textObj.text = health.ToString();
-                textObj.color = Color.white;
-            }
-        }
-    }
 
     void DestroyDirt()
     {
