@@ -11,7 +11,7 @@ public class RivalController : PlayerController, IController
     GameObject target;
     SpriteRenderer spriteRenderer;
 
-    float maxHealth = 100f;
+    public float maxHealth = 25f;
     float health;
 
     private void Start()
@@ -196,13 +196,18 @@ public class RivalController : PlayerController, IController
     {
         health -= amount;
         if (health < 1) Die();
+        Manager.Instance.ReddenSprite(gameObject, health, maxHealth);
     }
 
     void Die()
     {
-        foreach(GameObject _gem in Gems)
+        foreach(GemData _gem in Gems)
         {
-            Instantiate(_gem, transform.position, Quaternion.identity);
+            var newGem = Instantiate(new GameObject(), transform.position, Quaternion.identity);
+            var newGemScr = newGem.AddComponent<Gem>();
+            newGemScr.gemType = _gem.gemType;
+            newGemScr.score = _gem.score;
+            newGemScr.gemText = _gem.gemText;
         }
         Destroy(gameObject);
     }

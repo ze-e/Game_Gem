@@ -135,4 +135,22 @@ public class Manager : MonoBehaviour
             }
         }
     }
+
+    public void RaiseOpacity(GameObject gameObject, float val, float maxVal)
+    {
+
+        // Reduce opacity of SpriteRenderer based on remaining health
+        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        float opacity = val / maxVal;
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Abs(opacity));
+    }
+
+    public void ReddenSprite(GameObject gameObject, float val, float maxVal)
+    {
+
+        // Darken SpriteRenderer based on remaining health
+        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        float n = val / maxVal;
+        spriteRenderer.color = new Color(spriteRenderer.color.r * n, spriteRenderer.color.g, spriteRenderer.color.b);
+    }
 }

@@ -16,15 +16,10 @@ public interface IController
 public class Gem : MonoBehaviour
 {
     public GemType gemType;
-    string gemName;
     public int score;
 
     public GameObject gemText;
 
-    private void Start()
-    {
-        gemName = gemType.ToString();
-    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -62,6 +57,6 @@ public class Gem : MonoBehaviour
             controller.speed += 1;
             Manager.Instance.ShowText( transform, "\n Speed increased!", statColor);
         }
-        else Manager.Instance.ShowText( transform, "Picked Up:" + gemName, Color.white);
+        else Manager.Instance.ShowText( transform, "Picked Up:" + gemType.ToString(), Color.white);
     }
 } 

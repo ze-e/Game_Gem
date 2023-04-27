@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour, IController
     float cooldown = 60f;
 
     // inventory
-    protected List<GameObject> Gems = new List<GameObject>();
+    protected List<GemData> Gems = new List<GemData>();
     List<EquippedTypes> equipment = new List<EquippedTypes> { EquippedTypes.Pick, EquippedTypes.Machete };
     EquippedTypes primaryEquipped = EquippedTypes.Pick;
 
@@ -50,6 +50,15 @@ public class PlayerController : MonoBehaviour, IController
         if (Input.GetKeyUp(KeyCode.Space))
         {
             StopEquipped();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ChangeEquipped(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ChangeEquipped(-1);
         }
     }
 
@@ -120,7 +129,6 @@ public class PlayerController : MonoBehaviour, IController
         {
             case EquippedTypes.Pick:
                 animator.SetBool("Mining", false);
-                //StopCoroutine("CooldownCoroutine");
                 break;
             case EquippedTypes.Machete:
                 animator.SetBool("Attacking", false);
@@ -128,11 +136,14 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
-    void ChangeEquipped()
+    void ChangeEquipped(int changeBy)
     {
         int curIndex = equipment.IndexOf(primaryEquipped);
-        curIndex = (curIndex + 1) % equipment.Count;
+        if (curIndex + changeBy == equipment.Count) curIndex = 0;
+        else if (curIndex + changeBy < 0) curIndex = equipment.Count - 1;
+        else curIndex = curIndex + changeBy;
         primaryEquipped = equipment[curIndex];
+        Manager.Instance.UpdateEquip(equipment.Select(i => i.ToString()).ToArray(), primaryEquipped.ToString());
     }
 
     void Mine()
@@ -141,7 +152,7 @@ public class PlayerController : MonoBehaviour, IController
         if (hit.collider != null)
         {
             Dirt dirt = hit.collider.GetComponent<Dirt>();
-            
+
             if (dirt != null)
             {
                 // Start mining the dirt
@@ -150,19 +161,21 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
-    void Attack()
+    bool Attack()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
-        if (hit.collider != null)
+        // Check if there is enemy at the player's position
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+        Collider2D[] enemyCol = colliders.Where(c => c.GetComponent<RivalController>() != null).ToArray();
+        foreach (Collider2D collider in enemyCol)
         {
-            RivalController enemy = hit.collider.GetComponent<RivalController>();
-
+            RivalController enemy = collider.GetComponent<RivalController>();
             if (enemy != null)
             {
                 // Attack the enemy
-                enemy.Damage(.5f);
+                enemy.Damage(1f);
             }
         }
+        return false;
     }
 
     protected void DamageDirt(Dirt dirt)
@@ -179,7 +192,7 @@ public class PlayerController : MonoBehaviour, IController
         float init = stat;
         yield return new WaitForSeconds(cooldown);
         stat = init;
-        Manager.Instance.ShowText(transform,"\n" + stat + " reset", statColor);
+        Manager.Instance.ShowText(transform, "\n" + stat + " reset", statColor);
         Debug.Log("\n" + stat + " reset");
     }
 
@@ -187,8 +200,24 @@ public class PlayerController : MonoBehaviour, IController
 
     public void AddGem(GameObject _item)
     {
-        Gems.Add(_item);
+        Gem gem = _item.GetComponent<Gem>();
+        GemData data = new GemData(gem.gemType, gem.score, gem.gemText);
+        Gems.Add(data);
     }
+
+    protected class GemData {
+        public GemType gemType;
+        public int score;
+        public GameObject gemText;
+
+    public GemData(GemType _gemType, int _score, GameObject _gemText)
+    {
+            gemType = _gemType;
+            score = _score;
+            gemText = _gemText;
+    }
+}
+        
 
     #endregion
 

@@ -15,9 +15,9 @@ public class Dirt : MonoBehaviour
 
     public int toughness;
     public int maxLuck;
-    int maxHealth;
+    float maxHealth;
     int luck;
-    int health;
+    float health;
 
     void Start()
     {
@@ -71,9 +71,10 @@ public class Dirt : MonoBehaviour
             if (health < 1) health = 0;
 
             // Reduce opacity of SpriteRenderer based on remaining health
-            SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
-            float opacity = (float)health / (float)maxHealth;
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Abs(opacity));
+            //SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
+            //float opacity = health / maxHealth;
+            //spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Abs(opacity));
+            Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
         }
         //destroy when run out of health
         else if (health == 0) DestroyDirt();
