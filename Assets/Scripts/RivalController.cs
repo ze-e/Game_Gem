@@ -203,7 +203,7 @@ public class RivalController : PlayerController, IController
         foreach(GemScrObj _gem in Gems)
         {
             var newGem = Instantiate(gemPrefab, transform.position, Quaternion.identity);
-            var newGemScr = newGem.AddComponent<Gem>();
+            var newGemScr = newGem.GetComponent<Gem>();
             newGemScr.gemData = _gem;
             newGemScr.AttachData();
         }

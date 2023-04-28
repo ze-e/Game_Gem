@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour
 {
     // state
-    enum GhostState { Check, FollowPlayer, Walk, Attack }
+    enum GhostState { FollowPlayer, Attack }
     GhostState currentState;
     GameObject target;
     SpriteRenderer spriteRenderer;
@@ -47,14 +48,8 @@ public class GhostController : MonoBehaviour
         {
             switch (currentState)
             {
-                case GhostState.Check:
-                    Check();
-                    break;
                 case GhostState.FollowPlayer:
                     Follow("Player");
-                    break;
-                case GhostState.Walk:
-                    Follow("Dirt");
                     break;
             }
         }
@@ -70,19 +65,14 @@ public class GhostController : MonoBehaviour
         transform.GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value);
     }
 
-    void Check()
-    {
-        if (HasPlayer()) currentState = GhostState.Attack;
-        else currentState = GhostState.FollowPlayer;
-    }
-
     bool HasPlayer()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down);
-        if (hit.collider != null)
+        // Check if there is dirt at the player's position
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+        Collider2D[] playerCol = colliders.Where(c => c.GetComponent<PlayerController>() != null).ToArray();
+        foreach (Collider2D collider in playerCol)
         {
-            PlayerController player = hit.collider.GetComponent<PlayerController>();
-
+            PlayerController player = collider.GetComponent<PlayerController>();
             if (player != null)
             {
                 return true;
@@ -91,17 +81,33 @@ public class GhostController : MonoBehaviour
         return false;
     }
 
+    PlayerController ReturnPlayer()
+    {
+        // Check if there is dirt at the player's position
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+        Collider2D[] playerCol = colliders.Where(c => c.GetComponent<PlayerController>() != null).ToArray();
+        foreach (Collider2D collider in playerCol)
+        {
+            PlayerController player = collider.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                return player;
+            }
+        }
+        return null;
+    }
+
     void Attack()
     {
         animator.SetBool("Attacking", true);
         if (Throttled(speed * 3) && !HasPlayer())
         {
-            currentState = GhostState.Check;
+            currentState = GhostState.FollowPlayer;
             animator.SetBool("Attacking", false);
         }
         else
         {
-            PlayerController player = FindObjectOfType<PlayerController>();
+            PlayerController player = ReturnPlayer();
             if (player != null)
             {
                 player.Damage(1);

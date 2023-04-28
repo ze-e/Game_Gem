@@ -29,7 +29,7 @@ public class Manager : MonoBehaviour
 
     /* Timer */
     public float timer = 100f;
-    public float ghostTimer = 50f;
+    public float ghostTimer = 10f;
     private float currentTime;
 
     private void Awake()

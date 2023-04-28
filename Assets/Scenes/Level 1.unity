@@ -4842,9 +4842,9 @@ MonoBehaviour:
   UI: {fileID: 276911933}
   Text: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}
   rivalprefab: {fileID: 8454537823938923337, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
-  ghostPrefab: {fileID: 0}
-  timer: 5
-  ghostTimer: 1000
+  ghostPrefab: {fileID: 7721316154606373032, guid: fc315c8049247dd4fad9423d5b0e19dc, type: 3}
+  timer: 1000
+  ghostTimer: 5
 --- !u!4 &907697511
 Transform:
   m_ObjectHideFlags: 0
@@ -9236,7 +9236,7 @@ GameObject:
   - component: {fileID: 1573936793}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

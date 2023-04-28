@@ -75,7 +75,7 @@ public class Gem : MonoBehaviour
             controller.speed += 1;
             Manager.Instance.ShowText( transform, "\n Speed increased!", color);
         }
-        else if (gemType == GemType.Sapphire)
+        else if (gemType == GemType.Ruby)
         {
             StartCoroutine(controller.ResetStat(controller.maxHealth, color));
             controller.maxHealth += 1;
