@@ -20,8 +20,15 @@ public class PlayerController : MonoBehaviour, IController
     // powerup
     float cooldown = 60f;
 
+    // health
+    protected float health;
+
+    public float _maxHealth = 10;
+    public float maxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
+
+
     // inventory
-    protected List<GemData> Gems = new List<GemData>();
+    protected List<GemScrObj> Gems = new List<GemScrObj>();
     List<EquippedTypes> equipment = new List<EquippedTypes> { EquippedTypes.Pick, EquippedTypes.Machete };
     EquippedTypes primaryEquipped = EquippedTypes.Pick;
 
@@ -32,6 +39,7 @@ public class PlayerController : MonoBehaviour, IController
     private void Start()
     {
         animator = GetComponent<Animator>();
+        health = maxHealth;
     }
 
 
@@ -95,6 +103,11 @@ public class PlayerController : MonoBehaviour, IController
             // animation
             animator.SetBool("Walking", false);
         }
+    }
+
+    public void Heal()
+    {
+        health = maxHealth;
     }
 
     void StartEquipped()
@@ -161,6 +174,18 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
+    public void Damage(int damageBy)
+    {
+        health -= damageBy;
+        if (health < 1) Die();
+    }
+
+    void Die()
+    {
+        Debug.Log("Game Over");
+        Application.Quit();
+    }
+
     bool Attack()
     {
         // Check if there is enemy at the player's position
@@ -200,23 +225,9 @@ public class PlayerController : MonoBehaviour, IController
 
     public void AddGem(GameObject _item)
     {
-        Gem gem = _item.GetComponent<Gem>();
-        GemData data = new GemData(gem.gemType, gem.score, gem.gemText);
-        Gems.Add(data);
+        GemScrObj gemData = _item.GetComponent<Gem>().gemData;
+        Gems.Add(gemData);
     }
-
-    protected class GemData {
-        public GemType gemType;
-        public int score;
-        public GameObject gemText;
-
-    public GemData(GemType _gemType, int _score, GameObject _gemText)
-    {
-            gemType = _gemType;
-            score = _score;
-            gemText = _gemText;
-    }
-}
         
 
     #endregion

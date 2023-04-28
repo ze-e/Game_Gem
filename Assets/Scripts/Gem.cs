@@ -3,23 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
-public enum GemType { Sphene, Potassium, Sapphire };
 public interface IController
 {
     float miningSpeed { get; set; }
     float speed { get; set; }
+    float maxHealth { get; set; }
 
     IEnumerator ResetStat(float stat, Color statColor);
     void AddGem(GameObject _item);
+    void Heal();
 }
 public class Gem : MonoBehaviour
 {
+    public GemScrObj gemData;
+
+    [NonSerialized]
     public GemType gemType;
+    [NonSerialized]
     public int score;
+    [NonSerialized]
+    public Color color;
 
     public GameObject gemText;
 
+    private void Awake()
+    {
+        AttachData();
+    }
+
+    public void AttachData()
+    {
+        gemType = gemData.gemType;
+        score = gemData.score;
+        gameObject.GetComponent<SpriteRenderer>().sprite = gemData.sprite;
+        color = gemData.color;
+    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -45,17 +65,22 @@ public class Gem : MonoBehaviour
     {
         if (gemType == GemType.Potassium)
         {
-            Color statColor = Color.green;
-            StartCoroutine(controller.ResetStat(controller.miningSpeed, statColor));
+            StartCoroutine(controller.ResetStat(controller.miningSpeed, color));
             controller.miningSpeed += 1;
-            Manager.Instance.ShowText(transform, "\n Mining rate increased!", statColor);
+            Manager.Instance.ShowText(transform, "\n Mining rate increased!", color);
         }
         else if (gemType == GemType.Sapphire)
         {
-            Color statColor = Color.cyan;
-            StartCoroutine(controller.ResetStat(controller.speed, statColor));
+            StartCoroutine(controller.ResetStat(controller.speed, color));
             controller.speed += 1;
-            Manager.Instance.ShowText( transform, "\n Speed increased!", statColor);
+            Manager.Instance.ShowText( transform, "\n Speed increased!", color);
+        }
+        else if (gemType == GemType.Sapphire)
+        {
+            StartCoroutine(controller.ResetStat(controller.maxHealth, color));
+            controller.maxHealth += 1;
+            controller.Heal();
+            Manager.Instance.ShowText(transform, "\n Health increased!", color);
         }
         else Manager.Instance.ShowText( transform, "Picked Up:" + gemType.ToString(), Color.white);
     }

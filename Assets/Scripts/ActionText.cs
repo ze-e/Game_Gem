@@ -9,6 +9,7 @@ public class ActionText : MonoBehaviour
     public float size = 1f;
 
     private SpriteRenderer spriteRenderer;
+    bool isBelowTopEdge = true;
 
     private void Start()
     {
@@ -19,12 +20,28 @@ public class ActionText : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        if (isBelowTopEdge)
+        {
+            Move();
+            //GetTopEdge();
+        }
     }
 
     void Move()
     {
-        transform.position += new Vector3(0, speed * Time.deltaTime, 0);
+            transform.position += new Vector3(0, speed * Time.deltaTime, 0);
+    }
+
+    void GetTopEdge()
+    {
+        // Get the position of the top edge of the camera
+        float topEdgePosition = Camera.main.transform.position.y + Camera.main.orthographicSize;
+
+        // Check if the object is below the top edge of the camera by at least 10 pixels
+        if (transform.position.y > topEdgePosition - 10)
+        {
+            isBelowTopEdge = false;
+        }
     }
 
 

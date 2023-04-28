@@ -69,11 +69,6 @@ public class Dirt : MonoBehaviour
             // reduce health
             health--;
             if (health < 1) health = 0;
-
-            // Reduce opacity of SpriteRenderer based on remaining health
-            //SpriteRenderer spriteRenderer = dirtSprite.GetComponent<SpriteRenderer>();
-            //float opacity = health / maxHealth;
-            //spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Abs(opacity));
             Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
         }
         //destroy when run out of health
