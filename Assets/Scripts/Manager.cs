@@ -58,12 +58,15 @@ public class Manager : MonoBehaviour
         if (currentTime <= 0)
         {
             currentTime = timer;
+        }
+
+        if(currentTime <= 0)
+        {
             Spawn(rivalprefab);
         }
 
-        if (ghostTimer <= 0 && ghostCount > 0)
+        if (currentTime % ghostTimer == 0 && ghostCount > 0)
         {
-            currentTime = timer;
             Spawn(ghostPrefab);
             ghostCount--;
         }
@@ -119,7 +122,7 @@ public class Manager : MonoBehaviour
 
     public void AddGhost()
     {
-        ghostCount ++;
+        ghostCount++;
     }
 
     #endregion

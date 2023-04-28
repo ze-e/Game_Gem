@@ -7,6 +7,7 @@ public class GhostController : MonoBehaviour
 {
     // state
     enum GhostState { FollowPlayer, Attack }
+    [SerializeField]
     GhostState currentState;
     GameObject target;
     SpriteRenderer spriteRenderer;
@@ -50,6 +51,10 @@ public class GhostController : MonoBehaviour
             {
                 case GhostState.FollowPlayer:
                     Follow("Player");
+                    break;
+
+                case GhostState.Attack:
+                    Attack();
                     break;
             }
         }
@@ -100,18 +105,15 @@ public class GhostController : MonoBehaviour
     void Attack()
     {
         animator.SetBool("Attacking", true);
-        if (Throttled(speed * 3) && !HasPlayer())
+        PlayerController player = ReturnPlayer();
+        if (player != null)
         {
-            currentState = GhostState.FollowPlayer;
-            animator.SetBool("Attacking", false);
+            player.Damage(1);
         }
         else
         {
-            PlayerController player = ReturnPlayer();
-            if (player != null)
-            {
-                player.Damage(1);
-            }
+            currentState = GhostState.FollowPlayer;
+            animator.SetBool("Attacking", false);
         }
     }
 

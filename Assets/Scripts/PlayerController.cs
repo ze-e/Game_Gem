@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerController : MonoBehaviour, IController
 {
@@ -183,7 +185,8 @@ public class PlayerController : MonoBehaviour, IController
     void Die()
     {
         Debug.Log("Game Over");
-        Application.Quit();
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 
     bool Attack()
