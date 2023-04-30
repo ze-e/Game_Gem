@@ -15,6 +15,7 @@ public class ActionText : MonoBehaviour
     {
         transform.localScale = new Vector3(size, size, size);
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1.0f);
         StartCoroutine(FadeOut());
     }
 
@@ -54,8 +55,7 @@ public class ActionText : MonoBehaviour
         while (elapsedTime < duration)
         {
             float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
-            spriteColor.a = alpha;
-            spriteRenderer.color = spriteColor;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g,spriteRenderer.color.b, alpha);
             //Manager.Instance.RaiseOpacity(gameObject, elapsedTime, duration);
             elapsedTime += Time.deltaTime;
             yield return null;

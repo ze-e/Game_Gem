@@ -39,6 +39,7 @@ public class Gem : MonoBehaviour
         score = gemData.score;
         gameObject.GetComponent<SpriteRenderer>().sprite = gemData.sprite;
         color = gemData.color;
+        Debug.Log(color);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

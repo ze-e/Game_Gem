@@ -281,7 +281,7 @@ public class Manager : MonoBehaviour
             {
                 var textObj = child.gameObject.GetComponentInChildren<TMP_Text>();
                 textObj.text = _text;
-                textObj.color = _color;
+                textObj.color = new Color(_color.r, _color.g, _color.b, 1) ;
             }
         }
     }
