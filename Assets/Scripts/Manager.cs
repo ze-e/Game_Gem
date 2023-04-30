@@ -10,9 +10,9 @@ using Random = UnityEngine.Random;
 public class Manager : MonoBehaviour
 {
     public static Manager Instance { get; private set; }
-
+    enum GameState { Play, Pause, GameOver }
+    GameState currentState; 
     public GameObject player;
-
     /* DB */
     public static List<GemScrObj> GEM_DB;
     [SerializeField]
@@ -21,8 +21,7 @@ public class Manager : MonoBehaviour
     public int Score { get; private set; }
     public int RivalScore { get; private set; }
 
-    public GameObject UI;
-    public GameObject Text;
+
 
     /* Random Gen */
     public GameObject rivalprefab;
@@ -36,6 +35,17 @@ public class Manager : MonoBehaviour
     public int ghostSpawnTimer = 5;
     private int timer = 10000;
     private int currentTime;
+
+    /* UI */
+    public GameObject UI;
+    public GameObject Text;
+    [SerializeField]
+    GameObject GameOverUI;
+
+    /* Anim */
+    public GameObject bloodPrefab;
+    public GameObject deathPrefab;
+
 
     private void Awake()
     {
@@ -55,6 +65,31 @@ public class Manager : MonoBehaviour
         RivalScore = 0;
         CreateGemDB();
         currentTime = 0;
+        GameOverUI.SetActive(false);
+        currentState = GameState.Play;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Return))
+        {
+            switch (currentState)
+            {
+                case GameState.Play:
+                    currentState = GameState.Pause;
+                    Time.timeScale = 0f;
+                    break;
+                case GameState.Pause:
+                    currentState = GameState.Play;
+                    Time.timeScale = 1f;
+                    break;
+                case GameState.GameOver:
+                    RestartGame();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -78,12 +113,19 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public IEnumerable RestartGame()
+    public void GameOver()
     {
-        yield return new WaitForSeconds(5f);
+        GameOverUI.SetActive(true);
+        currentState = GameState.GameOver;
+    }
+
+    void RestartGame()
+    {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
     }
+
+
 
     #region db
     void CreateGemDB()
@@ -108,7 +150,6 @@ public class Manager : MonoBehaviour
     #region spawmn
     void Spawn(GameObject objToSpawn)
     {
-        Debug.Log(objToSpawn);
         Camera mainCamera = Camera.main;
         Vector3 randomPoint = Vector3.zero;
         float cameraWidth = mainCamera.orthographicSize * mainCamera.aspect;
@@ -228,6 +269,8 @@ public class Manager : MonoBehaviour
         }
     }
 
+
+#region util
     public void ShowText(Transform _transform, string _text, Color _color)
     {
         var gameObject = Instantiate(Text, _transform.transform.position, Quaternion.identity);
@@ -254,7 +297,6 @@ public class Manager : MonoBehaviour
 
     public void ReddenSprite(GameObject gameObject, float val, float maxVal)
     {
-
         // Darken SpriteRenderer based on remaining health
         SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         float n = val / maxVal;
@@ -265,4 +307,17 @@ public class Manager : MonoBehaviour
     {
         return time * 100;
     }
+
+    public void BloodAnim(Vector3 pos)
+    {
+        Instantiate(bloodPrefab, pos, Quaternion.identity);
+    }
+
+    public void DeathAnim(Vector3 pos)
+    {
+        Instantiate(deathPrefab, pos, Quaternion.identity);
+    }
+
+
+    #endregion
 }

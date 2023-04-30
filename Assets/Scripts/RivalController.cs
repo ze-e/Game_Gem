@@ -169,6 +169,7 @@ public class RivalController : PlayerController, IController
 
     public void Damage(float amount)
     {
+        DamageAnim();
         health -= amount;
         if (health < 1) Die();
         Manager.Instance.ReddenSprite(gameObject, health, maxHealth);
@@ -176,7 +177,8 @@ public class RivalController : PlayerController, IController
 
     void Die()
     {
-        foreach(GemScrObj _gem in Gems)
+        Manager.Instance.DeathAnim(transform.position);
+        foreach (GemScrObj _gem in Gems)
         {
             var newGem = Instantiate(gemPrefab, transform.position, Quaternion.identity);
             var newGemScr = newGem.GetComponent<Gem>();

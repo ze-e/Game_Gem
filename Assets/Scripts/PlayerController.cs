@@ -195,15 +195,26 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Damage(int damageBy)
     {
+        DamageAnim();
         health -= damageBy;
         if (health < 1) Die();
         Manager.Instance.UpdateUI("Health", health.ToString());
     }
 
+    protected void DamageAnim()
+    {
+        Manager.Instance.BloodAnim(transform.position);
+    }
+
+    protected void DeathAnim()
+    {
+        Manager.Instance.BloodAnim(transform.position);
+    }
+
     void Die()
     {
-        Debug.Log("Game Over");
-        Manager.Instance.RestartGame();
+        Manager.Instance.DeathAnim(transform.position);
+        Manager.Instance.GameOver();
         Destroy(gameObject);
     }
 

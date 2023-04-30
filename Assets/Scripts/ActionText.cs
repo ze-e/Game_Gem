@@ -48,6 +48,7 @@ public class ActionText : MonoBehaviour
     private IEnumerator FadeOut()
     {
         Color spriteColor = spriteRenderer.color;
+
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -55,6 +56,7 @@ public class ActionText : MonoBehaviour
             float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
             spriteColor.a = alpha;
             spriteRenderer.color = spriteColor;
+            //Manager.Instance.RaiseOpacity(gameObject, elapsedTime, duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
