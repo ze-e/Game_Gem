@@ -139,18 +139,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.25489402, y: -0.11296439}
+  m_Offset: {x: -0.0025231838, y: -0.08518046}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.625, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.49021196, y: 0.7740712}
+  m_Size: {x: 0.42075205, y: 0.8296391}
   m_EdgeRadius: 0
 --- !u!114 &-581636177051463138
 MonoBehaviour:
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593e13f6f3275cf46a1c1365b0589a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
-  _miningSpeed: 10
-  maxHealth: 25
+  _speed: 1
+  _miningSpeed: 1
+  _maxHealth: 10
   gemPrefab: {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}

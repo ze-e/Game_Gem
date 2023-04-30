@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 using Random = UnityEngine.Random;
 
 public class Manager : MonoBehaviour
@@ -28,9 +30,12 @@ public class Manager : MonoBehaviour
     int ghostCount;
 
     /* Timer */
-    public float timer = 100f;
-    public float ghostTimer = 10f;
-    private float currentTime;
+    [Range(1, 1000)]
+    public int rivalSpawnTimer = 10;
+    [Range(1, 1000)]
+    public int ghostSpawnTimer = 5;
+    private int timer = 10000;
+    private int currentTime;
 
     private void Awake()
     {
@@ -49,27 +54,35 @@ public class Manager : MonoBehaviour
         Score = 0;
         RivalScore = 0;
         CreateGemDB();
-        currentTime = timer;
+        currentTime = 0;
     }
 
     private void FixedUpdate()
     {
-        currentTime -= Time.deltaTime;
-        if (currentTime <= 0)
+        currentTime++;
+
+        if (currentTime > timer)
         {
-            currentTime = timer;
+            currentTime = 0;
         }
 
-        if(currentTime <= 0)
+        if(currentTime % formatTime(rivalSpawnTimer) == 0)
         {
             Spawn(rivalprefab);
         }
 
-        if (currentTime % ghostTimer == 0 && ghostCount > 0)
+        if (currentTime % formatTime(ghostSpawnTimer) == 0 && ghostCount > 0)
         {
             Spawn(ghostPrefab);
             ghostCount--;
         }
+    }
+
+    public IEnumerable RestartGame()
+    {
+        yield return new WaitForSeconds(5f);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 
     #region db
@@ -95,6 +108,7 @@ public class Manager : MonoBehaviour
     #region spawmn
     void Spawn(GameObject objToSpawn)
     {
+        Debug.Log(objToSpawn);
         Camera mainCamera = Camera.main;
         Vector3 randomPoint = Vector3.zero;
         float cameraWidth = mainCamera.orthographicSize * mainCamera.aspect;
@@ -130,16 +144,16 @@ public class Manager : MonoBehaviour
     public void AddScore(int num)
     {
         Score += num;
-        UpdateUIScore("Score", "Score:" + Score);
+        UpdateUI("Score", Score.ToString());
     }
 
     public void AddRivalScore(int num)
     {
         RivalScore += num;
-        UpdateUIScore("RivalScore", "RivalScore:" + RivalScore);
+        UpdateUI("RivalScore", RivalScore.ToString());
     }
 
-    public void UpdateUIScore(string key, string newVal)
+    public void UpdateUI(string key, string newVal)
     {
         Transform[] children = UI.GetComponentsInChildren<Transform>();
         foreach (var child in children)
@@ -245,5 +259,10 @@ public class Manager : MonoBehaviour
         SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         float n = val / maxVal;
         spriteRenderer.color = new Color(spriteRenderer.color.r * n, spriteRenderer.color.g, spriteRenderer.color.b);
+    }
+
+    public int formatTime(int time)
+    {
+        return time * 100;
     }
 }

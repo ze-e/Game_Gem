@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour, IController
 {
     enum EquippedTypes { Pick, Machete, TNT }
+
+    protected SpriteRenderer spriteRenderer;
 
     // Move
     public float _speed = 5f;
@@ -41,7 +42,9 @@ public class PlayerController : MonoBehaviour, IController
     private void Start()
     {
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         health = maxHealth;
+        UpdateUI();
     }
 
 
@@ -161,13 +164,27 @@ public class PlayerController : MonoBehaviour, IController
         Manager.Instance.UpdateEquip(equipment.Select(i => i.ToString()).ToArray(), primaryEquipped.ToString());
     }
 
+    protected Collider2D CheckDirt()
+    {
+
+        // Check if there is dirt at the player's position
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(GetPickPos(), 0.25f);
+        Collider2D[] filteredCol = colliders.Where(c => c.GetComponent<Dirt>() != null).ToArray();
+        return filteredCol.Length > 0 ? filteredCol[0] : null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(GetPickPos(), 0.25f);
+    }
+
     void Mine()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
-        if (hit.collider != null)
+        Collider2D col = CheckDirt();
+        if (col != null)
         {
-            Dirt dirt = hit.collider.GetComponent<Dirt>();
-
+            Dirt dirt = col.GetComponent<Dirt>();
             if (dirt != null)
             {
                 // Start mining the dirt
@@ -180,19 +197,20 @@ public class PlayerController : MonoBehaviour, IController
     {
         health -= damageBy;
         if (health < 1) Die();
+        Manager.Instance.UpdateUI("Health", health.ToString());
     }
 
     void Die()
     {
         Debug.Log("Game Over");
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex);
+        Manager.Instance.RestartGame();
+        Destroy(gameObject);
     }
 
     bool Attack()
     {
         // Check if there is enemy at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.25f);
         Collider2D[] enemyCol = colliders.Where(c => c.GetComponent<RivalController>() != null).ToArray();
         foreach (Collider2D collider in enemyCol)
         {
@@ -221,7 +239,6 @@ public class PlayerController : MonoBehaviour, IController
         yield return new WaitForSeconds(cooldown);
         stat = init;
         Manager.Instance.ShowText(transform, "\n" + stat + " reset", statColor);
-        Debug.Log("\n" + stat + " reset");
     }
 
     #region inventory
@@ -231,11 +248,25 @@ public class PlayerController : MonoBehaviour, IController
         GemScrObj gemData = _item.GetComponent<Gem>().gemData;
         Gems.Add(gemData);
     }
-        
+
 
     #endregion
 
+    #region UI
+    void UpdateUI()
+    {
+        Manager.Instance.UpdateUI("Health", health.ToString());
+        Manager.Instance.UpdateUI("MaxHealth", maxHealth.ToString());
+    }
+    #endregion
+
     #region utility
+
+    protected Vector2 GetPickPos()
+    {
+        if (!spriteRenderer) spriteRenderer = GetComponent<SpriteRenderer>();
+        return new Vector2(!spriteRenderer.flipX ? transform.position.x + 0.25f : transform.position.x - .25f, transform.position.y - 0.25f);
+    }
 
     #endregion
 

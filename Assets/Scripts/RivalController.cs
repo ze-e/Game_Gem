@@ -9,14 +9,12 @@ public class RivalController : PlayerController, IController
     enum RivalState {Idle, Check, Mine, FollowGem, Walk}
     RivalState currentState;
     GameObject target;
-    SpriteRenderer spriteRenderer;
 
     public GameObject gemPrefab;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         SetRandomColor();
         currentState = RivalState.Idle;
         health = maxHealth;
@@ -49,6 +47,12 @@ public class RivalController : PlayerController, IController
                 case RivalState.Mine:
                     Mine();
                     break;
+            }
+        }
+        else
+        {
+            switch (currentState)
+            {
                 case RivalState.FollowGem:
                     Follow("Gem");
                     break;
@@ -72,49 +76,20 @@ public class RivalController : PlayerController, IController
 
     void Check()
     {
-        if (HasDirt())
+        Collider2D col = CheckDirt();
+        if (col != null)
         {
             animator.SetBool("Mining", true);
             currentState = RivalState.Mine;
         }
-        if (HasGem()) currentState = RivalState.FollowGem;
+        else if (HasGem()) currentState = RivalState.FollowGem;
         else currentState = RivalState.Idle;
-    }
-
-    bool HasDirt()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
-        if (hit.collider != null)
-        {
-            Dirt dirt = hit.collider.GetComponent<Dirt>();
-
-            if (dirt != null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    Dirt ReturnDirt()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
-        if (hit.collider != null)
-        {
-            Dirt dirt = hit.collider.GetComponent<Dirt>();
-
-            if (dirt != null)
-            {
-                return dirt;
-            }
-        }
-        return null;
     }
 
     bool HasGem()
     {
         // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
         Collider2D[] gemCol = colliders.Where(c => c.GetComponent<Gem>() != null).ToArray();
         foreach (Collider2D collider in gemCol)
         {
@@ -129,13 +104,14 @@ public class RivalController : PlayerController, IController
 
     void Mine()
     {
-        if (Throttled(speed * 3) && !HasDirt()) { 
+        Collider2D col = CheckDirt();
+        if (Throttled(speed * 3) && col == null) { 
             currentState = RivalState.Check; 
             animator.SetBool("Mining", false);
         }
         else
         {
-            Dirt dirt = ReturnDirt();
+            Dirt dirt = col.gameObject.GetComponent<Dirt>();
             if (dirt != null)
             {
                 DamageDirt(dirt);
@@ -215,7 +191,7 @@ public class RivalController : PlayerController, IController
 
     void HandleSprite () {
         Vector2 currentPosition = transform.position;
-
+        if (!spriteRenderer) spriteRenderer = GetComponent<SpriteRenderer>();
         if (currentPosition.x < target.transform.position.x)
         {
             spriteRenderer.flipX = false; // face right
