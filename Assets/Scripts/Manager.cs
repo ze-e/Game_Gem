@@ -108,8 +108,10 @@ public class Manager : MonoBehaviour
 
         if (currentTime % formatTime(ghostSpawnTimer) == 0 && ghostCount > 0)
         {
-            Spawn(ghostPrefab);
-            ghostCount--;
+            for (int i = 0; i < ghostCount; i++)
+            {
+                Spawn(ghostPrefab);
+            }
         }
     }
 

@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour, IController
         throttle++;
         if (throttle == throttleBy * 10) throttle = 0;
 
-        if (!isUsingAction) Move();
+        if (!isUsingAction && Input.anyKey) Move();
 
         if (Input.GetKey(KeyCode.Space))
         {
@@ -96,11 +96,11 @@ public class PlayerController : MonoBehaviour, IController
             animator.SetBool("Walking", true);
             if (horizontal < 0f)
             {
-                transform.localScale = new Vector3(-1f, 1f, 1f);
+                spriteRenderer.flipX = true;
             }
             else if (horizontal > 0f)
             {
-                transform.localScale = new Vector3(1f, 1f, 1f);
+                spriteRenderer.flipX = false;
             }
         }
         else
@@ -222,14 +222,21 @@ public class PlayerController : MonoBehaviour, IController
     {
         // Check if there is enemy at the player's position
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.25f);
-        Collider2D[] enemyCol = colliders.Where(c => c.GetComponent<RivalController>() != null).ToArray();
+        Collider2D[] enemyCol = colliders.Where(c => c.GetComponent<RivalController>() != null || c.GetComponent<GhostController>() != null).ToArray();
         foreach (Collider2D collider in enemyCol)
         {
-            RivalController enemy = collider.GetComponent<RivalController>();
+            var enemy = collider.GetComponent<RivalController>();
             if (enemy != null)
             {
                 // Attack the enemy
                 enemy.Damage(1f);
+            }
+
+            var ghost = collider.GetComponent<GhostController>();
+            if (ghost != null)
+            {
+                // Attack the ghost
+                ghost.Damage(1f);
             }
         }
         return false;
@@ -276,7 +283,7 @@ public class PlayerController : MonoBehaviour, IController
     protected Vector2 GetPickPos()
     {
         if (!spriteRenderer) spriteRenderer = GetComponent<SpriteRenderer>();
-        return new Vector2(!spriteRenderer.flipX ? transform.position.x + 0.25f : transform.position.x - .25f, transform.position.y - 0.25f);
+        return new Vector2(!spriteRenderer.flipX ? transform.position.x + 0.25f : transform.position.x - 0.25f, transform.position.y - 0.25f);
     }
 
     #endregion
