@@ -78,7 +78,7 @@ public class Gem : MonoBehaviour
         else if (gemType == GemType.Ruby)
         {
             StartCoroutine(controller.ResetStat(controller.maxHealth, color));
-            controller.maxHealth += 0.3f;
+            controller.maxHealth += 1;
             controller.Heal();
             Manager.Instance.ShowText(transform, "\n Health increased!", color);
             if (controller.gameObject.name == "Player") {
