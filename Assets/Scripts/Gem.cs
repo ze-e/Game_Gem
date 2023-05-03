@@ -66,19 +66,19 @@ public class Gem : MonoBehaviour
         if (gemType == GemType.Potassium)
         {
             StartCoroutine(controller.ResetStat(controller.miningSpeed, color));
-            controller.miningSpeed += 1;
+            controller.miningSpeed += 0.3f;
             Manager.Instance.ShowText(transform, "\n Mining rate increased!", color);
         }
         else if (gemType == GemType.Sapphire)
         {
             StartCoroutine(controller.ResetStat(controller.speed, color));
-            controller.speed += 1;
+            controller.speed += 0.3f;
             Manager.Instance.ShowText( transform, "\n Speed increased!", color);
         }
         else if (gemType == GemType.Ruby)
         {
             StartCoroutine(controller.ResetStat(controller.maxHealth, color));
-            controller.maxHealth += 1;
+            controller.maxHealth += 0.3f;
             controller.Heal();
             Manager.Instance.ShowText(transform, "\n Health increased!", color);
             if (controller.gameObject.name == "Player") {
