@@ -19,16 +19,17 @@ public class Dirt : MonoBehaviour
     int luck;
     float health;
 
-    //int depth;
-    //int maxDepth = 10;
+    public int depth;
+    int maxDepth = 10;
 
-    //Color initColor;
+    Color initColor;
 
     void Start()
     {
         SetLayer();
         //depth = Random.Range(3, maxDepth);
-        //initColor = gameObject.GetComponent<SpriteRenderer>().color;
+        depth = maxDepth;
+        initColor = gameObject.GetComponent<SpriteRenderer>().color;
     }
 
     void SetLayer()
@@ -74,28 +75,38 @@ public class Dirt : MonoBehaviour
         spriteRenderer.color = newColor;
 
         // set depth 
-        //SetDepth();
+        SetDepth();
     }
 
-    //void SetDepth()
-    //{
-    //    var renderer = gameObject.GetComponent<SpriteRenderer>();
-    //    switch (depth)
-    //    {
-    //        case 3:
-    //            renderer.color = new Color(106, 37,0);
-    //            break;
-    //        case 2:
-    //            renderer.color =  new Color(224, 79, 0);
-    //            break;
-    //        case 1:
-    //            renderer.color = new Color(106, 106, 106);
-    //            break;
-    //        default:
-    //            if(depth > 3) renderer.color = initColor;
-    //            break;
-    //    }
-    //}
+    void SetDepth()
+    {
+        var renderer = gameObject.GetComponent<SpriteRenderer>();
+        switch (depth)
+        {
+            case 3:
+                renderer.color = new Color(106, 37, 0);
+                Debug.Log(renderer.color);
+
+                break;
+            case 2:
+                renderer.color = new Color(224, 79, 0);
+                Debug.Log(renderer.color);
+
+                break;
+            case 1:
+                renderer.color = new Color(106, 106, 106);
+                Debug.Log(renderer.color);
+
+                break;
+            default:
+                if (depth > 3) renderer.color = initColor;
+                Debug.Log(renderer.color);
+
+                break;
+        }
+
+        Debug.Log(renderer.color);
+    }
 
     public void Damage()
     {
@@ -107,12 +118,12 @@ public class Dirt : MonoBehaviour
             Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
         }
         //destroy when run out of health
-        //else if (health == 0 && depth > 1) DestoryLayer();
-        //else if (health == 0 && depth == 1) DestroyDirt();
-        else if (health == 0) DestroyDirt();
+        else if (health == 0 && depth > 1) DestroyLayer();
+        else if (health == 0 && depth == 1) DestroyDirt();
+        //else if (health == 0) DestroyDirt();
     }
 
-    void DestoryLayer()
+    void DestroyLayer()
     {
         int pull = Random.Range(0, luck);
         if (pull == 1)
@@ -124,7 +135,7 @@ public class Dirt : MonoBehaviour
             }
         }
         health = maxHealth;
-        //depth--;
+        depth--;
         SetLayer();
     }
 

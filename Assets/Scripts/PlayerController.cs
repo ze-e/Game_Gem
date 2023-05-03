@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour, IController
     // powerup
     float cooldown = 60f;
 
+    // pick
+    int pickLayer = 1; //pick can mine up to this layer
+
     // health
     protected float health;
 
@@ -185,7 +188,7 @@ public class PlayerController : MonoBehaviour, IController
         if (col != null)
         {
             Dirt dirt = col.GetComponent<Dirt>();
-            if (dirt != null)
+            if (dirt != null && pickLayer <= dirt.depth)
             {
                 // Start mining the dirt
                 DamageDirt(dirt);

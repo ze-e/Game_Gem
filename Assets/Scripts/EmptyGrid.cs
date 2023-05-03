@@ -17,8 +17,8 @@ public class EmptyGrid : MonoBehaviour
 
     private void Start()
     {
-        delayTime = Random.Range(maxSeconds/2 + 1, maxSeconds);
-        StartCoroutine(CallMethodAfterDelay(delayTime, SpawnNewDirt));
+        //delayTime = Random.Range(maxSeconds/2 + 1, maxSeconds);
+        //StartCoroutine(CallMethodAfterDelay(delayTime, SpawnNewDirt));
     }
 
     IEnumerator CallMethodAfterDelay(float delayInSeconds, System.Action methodToCall)
