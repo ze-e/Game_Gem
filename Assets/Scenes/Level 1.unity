@@ -1131,6 +1131,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -581636177051463138, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
+      propertyPath: _pickLayer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7328604984944571382, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1188,6 +1192,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -581636177051463138, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
+      propertyPath: _pickLayer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7328604984944571382, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -5684,7 +5692,7 @@ MonoBehaviour:
   GEM_DB_PATH: ScriptableObjects/Gems
   rivalprefab: {fileID: 8454537823938923337, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
   ghostPrefab: {fileID: 7721316154606373032, guid: fc315c8049247dd4fad9423d5b0e19dc, type: 3}
-  rivalSpawnTimer: 10
+  rivalSpawnTimer: 1000
   ghostSpawnTimer: 5
   UI: {fileID: 276911933}
   Text: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}

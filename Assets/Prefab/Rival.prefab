@@ -166,6 +166,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 1
   _miningSpeed: 1
+  _pickLayer: 10
   _maxHealth: 10
   gemPrefab: {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
-  bloodPrefab: {fileID: 4279273509453880603, guid: 0c44b35657606314fbf933a4a2ac4842, type: 3}

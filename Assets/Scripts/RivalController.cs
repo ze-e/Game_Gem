@@ -6,8 +6,10 @@ using UnityEngine;
 public class RivalController : PlayerController, IController
 {
     // state
-    enum RivalState {Idle, Check, Mine, FollowGem, Walk}
+    enum RivalState {Check, Mine, FollowGem, Walk}
+    [SerializeField]
     RivalState currentState;
+    [SerializeField]
     GameObject target;
 
     public GameObject gemPrefab;
@@ -16,7 +18,7 @@ public class RivalController : PlayerController, IController
     {
         animator = GetComponent<Animator>();
         SetRandomColor();
-        currentState = RivalState.Idle;
+        currentState = RivalState.Check;
         health = maxHealth;
     }
 
@@ -38,9 +40,6 @@ public class RivalController : PlayerController, IController
         {
             switch (currentState)
             {
-                case RivalState.Idle:
-                    SetRandomState();
-                    break;
                 case RivalState.Check:
                     Check();
                     break;
@@ -79,11 +78,15 @@ public class RivalController : PlayerController, IController
         Collider2D col = CheckDirt();
         if (col != null)
         {
-            animator.SetBool("Mining", true);
-            currentState = RivalState.Mine;
+            if (pickLayer <= col.gameObject.GetComponent<Dirt>().depth)
+            {
+                animator.SetBool("Mining", true);
+                currentState = RivalState.Mine;
+            }
+            else currentState = RivalState.Walk;
         }
         else if (HasGem()) currentState = RivalState.FollowGem;
-        else currentState = RivalState.Idle;
+        else currentState = RivalState.Walk;
     }
 
     bool HasGem()
@@ -113,8 +116,12 @@ public class RivalController : PlayerController, IController
         {
             Dirt dirt = col.gameObject.GetComponent<Dirt>();
             if (dirt != null){
-                if(pickLayer <= dirt.depth) DamageDirt(dirt);
-                else currentState = RivalState.Check;
+                if (pickLayer <= dirt.depth) DamageDirt(dirt);
+                else
+                {
+                    currentState = RivalState.Check;
+                    animator.SetBool("Mining", false);
+                }
             }
         }
     }
@@ -135,7 +142,7 @@ public class RivalController : PlayerController, IController
                 target = null;
 
                 animator.SetBool("Walking", false);
-                currentState = RivalState.Idle;
+                currentState = RivalState.Check;
             }
         }
         else GetTarget(tag);
@@ -147,7 +154,7 @@ public class RivalController : PlayerController, IController
 
         if (targets.Length == 0)
         {
-            currentState = RivalState.Idle;
+            currentState = RivalState.Check;
             return;
         }
 
