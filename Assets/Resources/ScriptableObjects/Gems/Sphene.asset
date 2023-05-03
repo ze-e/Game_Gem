@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551a872fae5f412419cd819c09aadc54, type: 3}
   m_Name: Sphene
   m_EditorClassIdentifier: 
-  gemType: 2
+  gemType: 0
   score: 100
   description: Increases Mining Speed
   sprite: {fileID: 21300000, guid: a05d513aa4214394fa74494431f0f5de, type: 3}

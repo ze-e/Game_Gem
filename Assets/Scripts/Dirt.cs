@@ -19,12 +19,24 @@ public class Dirt : MonoBehaviour
     int luck;
     float health;
 
+    //int depth;
+    //int maxDepth = 10;
+
+    //Color initColor;
+
     void Start()
+    {
+        SetLayer();
+        //depth = Random.Range(3, maxDepth);
+        //initColor = gameObject.GetComponent<SpriteRenderer>().color;
+    }
+
+    void SetLayer()
     {
         SetSprite();
         maxHealth = Random.Range(maxHealth / 2 + 1, toughness);
         health = maxHealth;
-        luck = Random.Range(maxLuck/2 + 1, maxLuck);
+        luck = Random.Range(maxLuck / 2 + 1, maxLuck);
     }
 
     void SetSprite()
@@ -60,7 +72,30 @@ public class Dirt : MonoBehaviour
         Color newColor = spriteRenderer.color;
         newColor.a = 1;
         spriteRenderer.color = newColor;
+
+        // set depth 
+        //SetDepth();
     }
+
+    //void SetDepth()
+    //{
+    //    var renderer = gameObject.GetComponent<SpriteRenderer>();
+    //    switch (depth)
+    //    {
+    //        case 3:
+    //            renderer.color = new Color(106, 37,0);
+    //            break;
+    //        case 2:
+    //            renderer.color =  new Color(224, 79, 0);
+    //            break;
+    //        case 1:
+    //            renderer.color = new Color(106, 106, 106);
+    //            break;
+    //        default:
+    //            if(depth > 3) renderer.color = initColor;
+    //            break;
+    //    }
+    //}
 
     public void Damage()
     {
@@ -72,7 +107,25 @@ public class Dirt : MonoBehaviour
             Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
         }
         //destroy when run out of health
+        //else if (health == 0 && depth > 1) DestoryLayer();
+        //else if (health == 0 && depth == 1) DestroyDirt();
         else if (health == 0) DestroyDirt();
+    }
+
+    void DestoryLayer()
+    {
+        int pull = Random.Range(0, luck);
+        if (pull == 1)
+        {
+            int chosenGem = Random.Range(0, gemPrefabs.Length);
+            if (chosenGem < gemPrefabs.Length)
+            {
+                Instantiate(gemPrefabs[chosenGem], transform.position, Quaternion.identity);
+            }
+        }
+        health = maxHealth;
+        //depth--;
+        SetLayer();
     }
 
 
