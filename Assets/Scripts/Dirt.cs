@@ -29,7 +29,7 @@ public class Dirt : MonoBehaviour
         SetLayer();
         //depth = Random.Range(3, maxDepth);
         depth = maxDepth;
-        initColor = gameObject.GetComponent<SpriteRenderer>().color;
+        initColor = dirtSprite.GetComponent<SpriteRenderer>().color;
     }
 
     void SetLayer()
@@ -80,32 +80,40 @@ public class Dirt : MonoBehaviour
 
     void SetDepth()
     {
-        var renderer = gameObject.GetComponent<SpriteRenderer>();
+        var renderer = dirtSprite.GetComponent<SpriteRenderer>();
         switch (depth)
         {
+            case 9:
+                renderer.color = new Color(100, 30, 0);
+                break;
+            case 8:
+                renderer.color = new Color(120, 50, 0);
+                break;
+            case 7:
+                renderer.color = new Color(140, 70, 0);
+                break;
+            case 6:
+                renderer.color = new Color(160, 90, 0);
+                break;
+            case 5:
+                renderer.color = new Color(180, 110, 0);
+                break;
+            case 4:
+                renderer.color = new Color(200, 130, 0);
+                break;
             case 3:
-                renderer.color = new Color(106, 37, 0);
-                Debug.Log(renderer.color);
-
+                renderer.color = new Color(220, 150, 0);
                 break;
             case 2:
-                renderer.color = new Color(224, 79, 0);
-                Debug.Log(renderer.color);
-
+                renderer.color = new Color(230, 80, 0);
                 break;
             case 1:
                 renderer.color = new Color(106, 106, 106);
-                Debug.Log(renderer.color);
-
                 break;
             default:
-                if (depth > 3) renderer.color = initColor;
-                Debug.Log(renderer.color);
-
+                if (depth > 9) renderer.color = initColor;
                 break;
         }
-
-        Debug.Log(renderer.color);
     }
 
     public void Damage()

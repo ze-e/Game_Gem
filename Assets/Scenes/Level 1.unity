@@ -10553,6 +10553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 1
   _miningSpeed: 1
+  _pickLayer: 10
   _maxHealth: 10
 --- !u!61 &1573936793
 BoxCollider2D:

@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour, IController
     float cooldown = 60f;
 
     // pick
-    int pickLayer = 1; //pick can mine up to this layer
+    public float _pickLayer = 10;  //pick can mine up to this layer
+    public float pickLayer { get { return _pickLayer; } set { _pickLayer = value; } }
 
     // health
     protected float health;

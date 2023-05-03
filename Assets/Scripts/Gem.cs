@@ -10,6 +10,7 @@ public interface IController
     float miningSpeed { get; set; }
     float speed { get; set; }
     float maxHealth { get; set; }
+    float pickLayer { get; set; }
 
     IEnumerator ResetStat(float stat, Color statColor);
     void AddGem(GameObject _item);
@@ -84,6 +85,12 @@ public class Gem : MonoBehaviour
             if (controller.gameObject.name == "Player") {
                 Manager.Instance.UpdateUI("MaxHealth", controller.maxHealth.ToString());
             }
+        }
+        else if (gemType == GemType.Onyx)
+        {
+            StartCoroutine(controller.ResetStat(controller.speed, color));
+            if(controller.pickLayer > 0) controller.pickLayer--;
+            Manager.Instance.ShowText(transform, "\n Pick strength increased!", color);
         }
         else Manager.Instance.ShowText( transform, "Picked Up:" + gemType.ToString(), Color.white);
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GemType { Sphene, Potassium, Sapphire, Ruby };
+public enum GemType { Sphene, Potassium, Sapphire, Ruby, Onyx };
 
 [CreateAssetMenu(fileName = "Gem", menuName = "Gem")]
 public class GemScrObj : ScriptableObject

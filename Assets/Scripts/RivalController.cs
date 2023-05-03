@@ -112,9 +112,9 @@ public class RivalController : PlayerController, IController
         else
         {
             Dirt dirt = col.gameObject.GetComponent<Dirt>();
-            if (dirt != null)
-            {
-                DamageDirt(dirt);
+            if (dirt != null){
+                if(pickLayer <= dirt.depth) DamageDirt(dirt);
+                else currentState = RivalState.Check;
             }
         }
     }

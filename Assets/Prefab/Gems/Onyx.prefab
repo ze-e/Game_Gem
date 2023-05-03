@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3256090232755914951}
   - component: {fileID: 4096046530805627252}
   m_Layer: 0
-  m_Name: Sapphire
+  m_Name: Onyx
   m_TagString: Gem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,5 +122,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50bae84bf8797149a1edee2cf0e8d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gemData: {fileID: 11400000, guid: a9a686248bfc3d548933404fed67dcd9, type: 2}
+  gemData: {fileID: 11400000, guid: f35de80332be7eb4599b10910c4982ae, type: 2}
   gemText: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}
