@@ -14,7 +14,7 @@ public class GhostController : MonoBehaviour
 
     public float maxHealth = 25f;
     float health;
-    public float speed = 5f;
+    public float speed = 3f;
 
     Animator animator;
 
@@ -173,6 +173,8 @@ public class GhostController : MonoBehaviour
 
     void Die()
     {
+        Manager.Instance.DeathAnim(transform.position);
+        Manager.Instance.ghostCount++;
         Destroy(gameObject);
     }
 

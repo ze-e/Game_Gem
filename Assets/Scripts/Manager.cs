@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour
     /* Random Gen */
     public GameObject rivalprefab;
     public GameObject ghostPrefab;
-    int ghostCount;
+    public int ghostCount;
 
     /* Timer */
     [Range(1, 1000)]
@@ -111,6 +111,7 @@ public class Manager : MonoBehaviour
             for (int i = 0; i < ghostCount; i++)
             {
                 Spawn(ghostPrefab);
+                ghostCount--;
             }
         }
     }

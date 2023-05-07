@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour, IController
 
         if (!isUsingAction && Input.anyKey) Move();
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartEquipped();
         }
@@ -135,7 +135,6 @@ public class PlayerController : MonoBehaviour, IController
 
             case EquippedTypes.Machete:
                 animator.SetBool("Attacking", true);
-
                 if (Throttled(miningSpeed))
                 {
                     Attack();
