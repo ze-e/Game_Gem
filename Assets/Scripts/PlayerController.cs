@@ -74,11 +74,11 @@ public class PlayerController : MonoBehaviour, IController
             StopEquippedAnim();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && !isUsingAction)
         {
             ChangeEquipped(1);
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && !isUsingAction)
         {
             ChangeEquipped(-1);
         }
