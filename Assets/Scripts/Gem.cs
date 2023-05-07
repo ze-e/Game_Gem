@@ -15,6 +15,8 @@ public interface IController
     IEnumerator ResetStat(float stat, Color statColor);
     void AddGem(GameObject _item);
     void Heal();
+    void CreateDoppleGanger();
+    IEnumerator KillDoppleganger(float lifespan);
 }
 public class Gem : MonoBehaviour
 {
@@ -86,9 +88,14 @@ public class Gem : MonoBehaviour
         }
         else if (gemType == GemType.Onyx)
         {
-            StartCoroutine(controller.ResetStat(controller.speed, color));
             if(controller.pickLayer > 0) controller.pickLayer--;
             Manager.Instance.ShowText(transform, "\n Pick strength increased!", color);
+        }
+        else if (gemType == GemType.Mimik)
+        {
+            controller.CreateDoppleGanger();
+            StartCoroutine(controller.KillDoppleganger(5f));
+            Manager.Instance.ShowText(transform, "\n Picked up Mimik!", color);
         }
         else Manager.Instance.ShowText( transform, "Picked Up:" + gemType.ToString(), Color.white);
     }

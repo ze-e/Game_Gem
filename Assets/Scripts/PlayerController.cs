@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour, IController
     public float miningSpeed { get { return _miningSpeed; } set { _miningSpeed = value; } }
 
     // powerup
-    float cooldown = 60f;
+    float cooldown = 20f;
 
     // pick
     public float _pickLayer = 10;  //pick can mine up to this layer
@@ -281,6 +281,18 @@ public class PlayerController : MonoBehaviour, IController
         yield return new WaitForSeconds(cooldown);
         stat = init;
         Manager.Instance.ShowText(transform, "\n" + stat + " reset", statColor);
+    }
+
+    public void CreateDoppleGanger()
+    {
+        Instantiate(gameObject, new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z), Quaternion.identity);
+    }
+
+    public IEnumerator KillDoppleganger(float lifespan)
+    {
+        yield return new WaitForSeconds(lifespan);
+        Manager.Instance.DeathAnim(transform.position);
+        Destroy(gameObject);
     }
 
     #region inventory
