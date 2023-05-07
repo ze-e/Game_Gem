@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+    public enum EquippedTypes { Pick, Machete, TNT }
 
 public class PlayerController : MonoBehaviour, IController
 {
-    enum EquippedTypes { Pick, Machete, TNT }
 
     protected SpriteRenderer spriteRenderer;
 
@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour, IController
     protected List<GemScrObj> Gems = new List<GemScrObj>();
     List<EquippedTypes> equipment = new List<EquippedTypes> { EquippedTypes.Pick, EquippedTypes.Machete };
     EquippedTypes primaryEquipped = EquippedTypes.Pick;
+
+    public GameObject TNTPrefab;
 
     //throttle
     protected int throttle = 0;
@@ -81,6 +83,21 @@ public class PlayerController : MonoBehaviour, IController
         if (Input.GetKeyDown(KeyCode.Q) && !isUsingAction)
         {
             ChangeEquipped(-1);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if(collider.tag == "Item")
+        {
+            Item _item = collider.GetComponent<Item>();
+            AddItem(_item);
+            Destroy(collider.gameObject);
+        }
+
+        if (collider.tag == "Explosion")
+        {
+            Damage(3);
         }
     }
 
@@ -142,6 +159,16 @@ public class PlayerController : MonoBehaviour, IController
                 if (Throttled(miningSpeed))
                 {
                     Attack();
+                }
+                break;
+
+            case EquippedTypes.TNT:
+                if (Throttled(miningSpeed))
+                {
+                    equipment.Remove(EquippedTypes.TNT);
+                    primaryEquipped = EquippedTypes.Pick;
+                    Manager.Instance.UpdateEquip(equipment.Select(i => i.ToString()).ToArray(), EquippedTypes.Pick.ToString());
+                    Instantiate(TNTPrefab, transform.position, Quaternion.identity);
                 }
                 break;
         }
@@ -303,6 +330,11 @@ public class PlayerController : MonoBehaviour, IController
         Gems.Add(gemData);
     }
 
+    void AddItem(Item _item)
+    {
+        Manager.Instance.ShowText(transform, _item.name, Color.white);
+        equipment.Add(_item.equippedType);
+    }
 
     #endregion
 

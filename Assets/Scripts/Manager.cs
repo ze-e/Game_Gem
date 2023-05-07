@@ -28,11 +28,16 @@ public class Manager : MonoBehaviour
     public GameObject ghostPrefab;
     public int ghostCount;
 
+    /* Items */
+    public GameObject[] itemPrefabs;
+
     /* Timer */
     [Range(1, 1000)]
     public int rivalSpawnTimer = 10;
     [Range(1, 1000)]
     public int ghostSpawnTimer = 5;
+    [Range(1, 1000)]
+    public int itemSpawnTimer = 30;
     private int timer = 10000;
     private int currentTime;
 
@@ -114,6 +119,20 @@ public class Manager : MonoBehaviour
                 ghostCount--;
             }
         }
+
+        if (currentTime % formatTime(ghostSpawnTimer) == 0 && ghostCount > 0)
+        {
+            for (int i = 0; i < ghostCount; i++)
+            {
+                Spawn(ghostPrefab);
+                ghostCount--;
+            }
+        }
+
+        if (currentTime % formatTime(itemSpawnTimer) == 0)
+        {
+                SpawnItem();
+        }
     }
 
     public void GameOver()
@@ -176,6 +195,32 @@ public class Manager : MonoBehaviour
         }
         
         Instantiate(objToSpawn, randomPoint, Quaternion.identity);
+    }
+
+    void SpawnItem()
+    {
+        // Get the camera's position and size
+        Camera mainCamera = Camera.main;
+        float cameraHeight = 2f * mainCamera.orthographicSize;
+        float cameraWidth = cameraHeight * mainCamera.aspect;
+        Vector3 cameraPosition = mainCamera.transform.position;
+
+        // Calculate the bounds of the camera view
+        float leftBound = cameraPosition.x - cameraWidth / 2f;
+        float rightBound = cameraPosition.x + cameraWidth / 2f;
+        float bottomBound = cameraPosition.y - cameraHeight / 2f;
+        float topBound = cameraPosition.y + cameraHeight / 2f;
+
+        // Generate a random position within the camera view
+        Vector3 randomPosition = new Vector3(Random.Range(leftBound, rightBound), Random.Range(bottomBound, topBound), 0f);
+
+        // Spawn the item at the random position
+
+        int chosenItem = Random.Range(0, itemPrefabs.Length);
+        if (chosenItem < itemPrefabs.Length)
+        {
+            Instantiate(itemPrefabs[chosenItem], randomPosition, Quaternion.identity);
+        }
     }
 
     public void AddGhost()

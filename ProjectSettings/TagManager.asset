@@ -8,6 +8,7 @@ TagManager:
   - Dirt
   - Rival
   - Empty
+  - Item
   layers:
   - Default
   - TransparentFX

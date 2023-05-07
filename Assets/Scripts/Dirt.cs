@@ -27,9 +27,16 @@ public class Dirt : MonoBehaviour
     void Start()
     {
         SetLayer();
-        //depth = Random.Range(3, maxDepth);
         depth = maxDepth;
         initColor = dirtSprite.GetComponent<SpriteRenderer>().color;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Explosion")
+        {
+            Damage(Random.Range((int)(maxHealth / 2) , 100));
+        }
     }
 
     void SetLayer()
@@ -129,7 +136,20 @@ public class Dirt : MonoBehaviour
         //destroy when run out of health
         else if (health == 0 && depth > 1) DestroyLayer();
         else if (health == 0 && depth == 1) DestroyDirt();
-        //else if (health == 0) DestroyDirt();
+    }
+
+    public void Damage(int amount)
+    {
+        if (health > 0)
+        {
+            // reduce health
+            health-=amount;
+            if (health < 1) health = 0;
+            Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
+        }
+        //destroy when run out of health
+        else if (health == 0 && depth > 1) DestroyLayer();
+        else if (health == 0 && depth == 1) DestroyDirt();
     }
 
     void DestroyLayer()
