@@ -81,34 +81,35 @@ public class Dirt : MonoBehaviour
     void SetDepth()
     {
         var renderer = dirtSprite.GetComponent<SpriteRenderer>();
+
         switch (depth)
         {
             case 9:
-                renderer.color = new Color(69, 23, 0);
+                renderer.color = new Color(69f / 255f, 23f / 255f, 0f);
                 break;
             case 8:
-                renderer.color = new Color(255, 77, 0);
+                renderer.color = new Color(255f / 255f, 77f / 255f, 0f);
                 break;
             case 7:
-                renderer.color = new Color(255, 85, 0);
+                renderer.color = new Color(255f / 255f, 85f / 255f, 0f);
                 break;
             case 6:
-                renderer.color = new Color(255, 204, 0);
+                renderer.color = new Color(255f / 255f, 204f / 255f, 0f);
                 break;
             case 5:
-                renderer.color = new Color(87, 105, 0);
+                renderer.color = new Color(87f / 255f, 105f / 255f, 0f);
                 break;
             case 4:
-                renderer.color = new Color(4, 77, 0);
+                renderer.color = new Color(4f / 255f, 77f / 255f, 0f);
                 break;
             case 3:
-                renderer.color = new Color(0, 60, 110);
+                renderer.color = new Color(0f, 60f / 255f, 110f / 255f);
                 break;
             case 2:
-                renderer.color = new Color(69, 65, 107);
+                renderer.color = new Color(69f / 255f, 65f / 255f, 107f / 255f);
                 break;
             case 1:
-                renderer.color = new Color(94, 73, 81);
+                renderer.color = new Color(94f / 255f, 73f / 255f, 81f / 255f);
                 break;
             default:
                 if (depth > 9) renderer.color = initColor;
