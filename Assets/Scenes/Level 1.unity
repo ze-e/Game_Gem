@@ -5692,8 +5692,8 @@ MonoBehaviour:
   GEM_DB_PATH: ScriptableObjects/Gems
   rivalprefab: {fileID: 8454537823938923337, guid: 336366a8d1f435e409858c6d542e1858, type: 3}
   ghostPrefab: {fileID: 7721316154606373032, guid: fc315c8049247dd4fad9423d5b0e19dc, type: 3}
-  rivalSpawnTimer: 10
-  ghostSpawnTimer: 5
+  rivalSpawnTimer: 20
+  ghostSpawnTimer: 15
   UI: {fileID: 276911933}
   Text: {fileID: 4949320243504238922, guid: 5c7de7444f77d5a4db372c363fe73211, type: 3}
   GameOverUI: {fileID: 1627665230}

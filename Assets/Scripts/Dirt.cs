@@ -84,31 +84,31 @@ public class Dirt : MonoBehaviour
         switch (depth)
         {
             case 9:
-                renderer.color = new Color(100, 30, 0);
+                renderer.color = new Color(69, 23, 0);
                 break;
             case 8:
-                renderer.color = new Color(120, 50, 0);
+                renderer.color = new Color(255, 77, 0);
                 break;
             case 7:
-                renderer.color = new Color(140, 70, 0);
+                renderer.color = new Color(255, 85, 0);
                 break;
             case 6:
-                renderer.color = new Color(160, 90, 0);
+                renderer.color = new Color(255, 204, 0);
                 break;
             case 5:
-                renderer.color = new Color(180, 110, 0);
+                renderer.color = new Color(87, 105, 0);
                 break;
             case 4:
-                renderer.color = new Color(200, 130, 0);
+                renderer.color = new Color(4, 77, 0);
                 break;
             case 3:
-                renderer.color = new Color(220, 150, 0);
+                renderer.color = new Color(0, 60, 110);
                 break;
             case 2:
-                renderer.color = new Color(230, 80, 0);
+                renderer.color = new Color(69, 65, 107);
                 break;
             case 1:
-                renderer.color = new Color(106, 106, 106);
+                renderer.color = new Color(94, 73, 81);
                 break;
             default:
                 if (depth > 9) renderer.color = initColor;
