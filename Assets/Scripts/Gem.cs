@@ -83,9 +83,6 @@ public class Gem : MonoBehaviour
             controller.maxHealth += 1;
             controller.Heal();
             Manager.Instance.ShowText(transform, "\n Health increased!", color);
-            if (controller.gameObject.name == "Player") {
-                Manager.Instance.UpdateUI("MaxHealth", controller.maxHealth.ToString());
-            }
         }
         else if (gemType == GemType.Onyx)
         {

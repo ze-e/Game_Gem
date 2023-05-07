@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour, IController
     public void Heal()
     {
         health = maxHealth;
+        UpdateUI();
     }
 
     void StartEquipped()
