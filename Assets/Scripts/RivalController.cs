@@ -75,20 +75,22 @@ public class RivalController : PlayerController, IController
         currentState = (RivalState)Random.Range(0, System.Enum.GetValues(typeof(RivalState)).Length);
     }
 
-    void Check()
+    bool CheckGem(Collider2D[] colliders)
     {
-        // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(GetPickPos(), 2f);
         Collider2D[] gemCol = colliders.Where(c => c.GetComponent<Gem>() != null).ToArray();
-        Collider2D[] dirtCol = colliders.Where(c => c.GetComponent<Dirt>() != null).ToArray();
-
         if (gemCol.Length > 0)
         {
             currentState = RivalState.FollowGem;
-            return;
+            return true;
         }
+        return false;
+    }
 
-        else if (dirtCol.Length > 0)
+    bool CheckDirt(Collider2D[] colliders)
+    {
+        Collider2D[] dirtCol = colliders.Where(c => c.GetComponent<Dirt>() != null).ToArray();
+
+        if (dirtCol.Length > 0)
         {
             foreach (var item in dirtCol)
             {
@@ -96,10 +98,19 @@ public class RivalController : PlayerController, IController
                 {
                     animator.SetBool("Mining", true);
                     currentState = RivalState.Mine;
-                    return;
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    void Check()
+    {
+        // Check if there is dirt at the player's position
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(GetPickPos(), 2f);
+        if (CheckGem(colliders)) return;
+        else if (CheckDirt(colliders)) return;
         currentState = RivalState.Walk;
     }
 
@@ -111,8 +122,13 @@ public class RivalController : PlayerController, IController
         if (CanMine(dirt)) DamageDirt(dirt);
         else
         {
-            currentState = RivalState.Walk;
             animator.SetBool("Mining", false);
+            if (CheckGem(Physics2D.OverlapCircleAll(GetPickPos(), 2f)))
+            {
+                currentState = RivalState.FollowGem;
+                return;
+            }
+            currentState = RivalState.Walk;
         }
     }
     
