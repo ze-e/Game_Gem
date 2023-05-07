@@ -51,6 +51,7 @@ public class Gem : MonoBehaviour
             GemEffect(collider.gameObject.name == "Player" ? playerController : rivalController);
             PickUp(collider.gameObject.name == "Player" ? playerController : rivalController);
         }
+        if (collider.tag == "Empty") Destroy(gameObject);
     }
 
     void PickUp<T>(T controller) where T : MonoBehaviour, IController

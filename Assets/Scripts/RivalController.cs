@@ -11,6 +11,7 @@ public class RivalController : PlayerController, IController
     RivalState currentState;
     [SerializeField]
     GameObject target;
+    List<GameObject> lastTargets;
 
     public GameObject gemPrefab;
 
@@ -20,6 +21,7 @@ public class RivalController : PlayerController, IController
         SetRandomColor();
         currentState = RivalState.Check;
         health = maxHealth;
+        lastTargets = new List<GameObject>();
     }
 
     private void FixedUpdate()
@@ -75,54 +77,42 @@ public class RivalController : PlayerController, IController
 
     void Check()
     {
-        Collider2D col = CheckDirt();
-        if (col != null)
+        // Check if there is dirt at the player's position
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(GetPickPos(), 2f);
+        Collider2D[] gemCol = colliders.Where(c => c.GetComponent<Gem>() != null).ToArray();
+        Collider2D[] dirtCol = colliders.Where(c => c.GetComponent<Dirt>() != null).ToArray();
+
+        if (gemCol.Length > 0)
         {
-            if (pickLayer <= col.gameObject.GetComponent<Dirt>().depth)
-            {
-                animator.SetBool("Mining", true);
-                currentState = RivalState.Mine;
-            }
-            else currentState = RivalState.Walk;
+            currentState = RivalState.FollowGem;
+            return;
         }
-        else if (HasGem()) currentState = RivalState.FollowGem;
-        else currentState = RivalState.Walk;
+
+        else if (dirtCol.Length > 0)
+        {
+            foreach (var item in dirtCol)
+            {
+                if (CanMine(item.gameObject))
+                {
+                    animator.SetBool("Mining", true);
+                    currentState = RivalState.Mine;
+                    return;
+                }
+            }
+        }
+        currentState = RivalState.Walk;
     }
 
-    bool HasGem()
-    {
-        // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
-        Collider2D[] gemCol = colliders.Where(c => c.GetComponent<Gem>() != null).ToArray();
-        foreach (Collider2D collider in gemCol)
-        {
-            Gem gem = collider.GetComponent<Gem>();
-            if (gem != null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
     void Mine()
     {
         Collider2D col = CheckDirt();
-        if (Throttled(speed * 3) && col == null) { 
-            currentState = RivalState.Check; 
-            animator.SetBool("Mining", false);
-        }
+        Dirt dirt = col.gameObject.GetComponent<Dirt>();
+        if (CanMine(dirt)) DamageDirt(dirt);
         else
         {
-            Dirt dirt = col.gameObject.GetComponent<Dirt>();
-            if (dirt != null){
-                if (pickLayer <= dirt.depth) DamageDirt(dirt);
-                else
-                {
-                    currentState = RivalState.Check;
-                    animator.SetBool("Mining", false);
-                }
-            }
+            currentState = RivalState.Check;
+            animator.SetBool("Mining", false);
         }
     }
     
@@ -139,6 +129,8 @@ public class RivalController : PlayerController, IController
             if (transform.position == target.transform.position)
             {
                 // Set target to null
+                lastTargets.Add(target);
+                if (lastTargets.Count > 3) lastTargets.RemoveAt(0);
                 target = null;
 
                 animator.SetBool("Walking", false);
@@ -164,14 +156,18 @@ public class RivalController : PlayerController, IController
         for (int i = 1; i < targets.Length; i++)
         {
             float distance = Vector2.Distance(transform.position, targets[i].transform.position);
-            if (distance < nearestDistance)
+            if (distance < nearestDistance && (tag == "Gem" || CanMine(targets[i])) && !lastTargets.Contains(targets[i]))
             {
                 nearest = targets[i];
                 nearestDistance = distance;
             }
         }
 
-        target = nearest;
+        if (tag == "Gem" || CanMine(nearest))  target = nearest; 
+        else
+        {
+            currentState = RivalState.Walk;
+        }
     }
 
     public void Damage(float amount)
@@ -214,6 +210,19 @@ public class RivalController : PlayerController, IController
     #endregion
 
     #region utility
+
+    bool CanMine(GameObject gameObject)
+    {
+        Dirt dirt = gameObject.GetComponent<Dirt>();
+        if (dirt == null) return false;
+        return pickLayer <= dirt.depth;
+    }
+
+    bool CanMine(Dirt dirt)
+    {
+        if (dirt == null) return false;
+        return pickLayer <= dirt.depth;
+    }
 
     #endregion
 
