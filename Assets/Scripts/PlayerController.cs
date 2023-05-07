@@ -60,13 +60,18 @@ public class PlayerController : MonoBehaviour, IController
 
         if (!isUsingAction && Input.anyKey) Move();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             StartEquipped();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartEquippedAnim();
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
             StopEquipped();
+            StopEquippedAnim();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -125,7 +130,6 @@ public class PlayerController : MonoBehaviour, IController
         switch (primaryEquipped)
         {
             case EquippedTypes.Pick:
-                animator.SetBool("Mining", true);
 
                 if (Throttled(miningSpeed))
                 {
@@ -134,7 +138,6 @@ public class PlayerController : MonoBehaviour, IController
                 break;
 
             case EquippedTypes.Machete:
-                animator.SetBool("Attacking", true);
                 if (Throttled(miningSpeed))
                 {
                     Attack();
@@ -143,9 +146,26 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
+    void StartEquippedAnim()
+    {
+        switch (primaryEquipped)
+        {
+            case EquippedTypes.Pick:
+                animator.SetBool("Mining", true);
+                break;
+            case EquippedTypes.Machete:
+                animator.SetBool("Attacking", true);
+                break;
+        }
+    }
+
     void StopEquipped()
     {
         isUsingAction = false;
+    }
+
+    void StopEquippedAnim()
+    {
         switch (primaryEquipped)
         {
             case EquippedTypes.Pick:
