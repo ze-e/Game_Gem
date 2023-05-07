@@ -111,7 +111,7 @@ public class RivalController : PlayerController, IController
         if (CanMine(dirt)) DamageDirt(dirt);
         else
         {
-            currentState = RivalState.Check;
+            currentState = RivalState.Walk;
             animator.SetBool("Mining", false);
         }
     }
