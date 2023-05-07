@@ -35,7 +35,7 @@ public class Dirt : MonoBehaviour
     {
         if (collider.tag == "Explosion")
         {
-            Damage(Random.Range((int)(maxHealth / 2) , 100));
+            Damage(Random.Range((int)(maxHealth / 4) , 100));
         }
     }
 

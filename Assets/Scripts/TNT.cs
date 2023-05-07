@@ -10,7 +10,7 @@ public class TNT : MonoBehaviour
     private bool exploded = false;
     //throttle
     int throttle = 0;
-    public int throttleBy = 100;
+    public int throttleBy = 10000;
 
     // Start is called before the first frame update
     void Start()
@@ -23,8 +23,9 @@ public class TNT : MonoBehaviour
     //{
     //    if (throttle % throttleBy == 0)
     //    {
-            //Manager.Instance.RaiseOpacity(gameObject, throttle, explosionDelay * 10);
+    //        Manager.Instance.ReddenSprite(gameObject, throttle, throttleBy);
     //    }
+
     //    throttle++;
     //}
 
