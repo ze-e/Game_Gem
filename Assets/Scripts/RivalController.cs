@@ -261,7 +261,7 @@ public class RivalController : PlayerController, IController
             var ran = Random.Range(0, 10);
             if (ran == 1)
             {
-                GetTarget("Dirt");
+                GetTarget(currentState == RivalState.FollowGem ? "Gem" : "Dirt");
                 return;
             }
             // Calculate new direction by rotating current direction
