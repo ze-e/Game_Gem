@@ -214,12 +214,25 @@ public class Manager : MonoBehaviour
         // Generate a random position within the camera view
         Vector3 randomPosition = new Vector3(Random.Range(leftBound, rightBound), Random.Range(bottomBound, topBound), 0f);
 
-        // Spawn the item at the random position
-
-        int chosenItem = Random.Range(0, itemPrefabs.Length);
-        if (chosenItem < itemPrefabs.Length)
+        // Check if the random position contains a collider with a component called Wall
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(randomPosition, 1f);
+        bool hasWallCollider = false;
+        foreach (Collider2D collider in colliders)
         {
-            Instantiate(itemPrefabs[chosenItem], randomPosition, Quaternion.identity);
+            if (collider.GetComponent<Wall>() != null)
+            {
+                hasWallCollider = true;
+                break;
+            }
+        }
+        if (!hasWallCollider)
+        {
+            // Spawn the item at the random position
+            int chosenItem = Random.Range(0, itemPrefabs.Length);
+            if (chosenItem < itemPrefabs.Length)
+            {
+                Instantiate(itemPrefabs[chosenItem], randomPosition, Quaternion.identity);
+            }
         }
     }
 

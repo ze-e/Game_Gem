@@ -146,6 +146,8 @@ MonoBehaviour:
   toughness: 50
   maxLuck: 3
   depth: 0
+  wallPrefab: {fileID: 6431851937688837680, guid: 91c612b339e65c347a1fc090237a844b, type: 3}
+  wallLuck: 4
 --- !u!61 &-748616512334488220
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -15,6 +15,11 @@ public class RivalController : PlayerController, IController
 
     public GameObject gemPrefab;
 
+    //pathfinding
+    public float speed = 5f;
+    public float raycastDistance = 1f;
+    public float raycastAngle = 45f;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -119,7 +124,7 @@ public class RivalController : PlayerController, IController
     {
         Collider2D col = CheckDirt();
         Dirt dirt = col.gameObject.GetComponent<Dirt>();
-        if (CanMine(dirt)) DamageDirt(dirt);
+        if (dirt != null && CanMine(dirt)) DamageDirt(dirt);
         else
         {
             animator.SetBool("Mining", false);
@@ -139,7 +144,8 @@ public class RivalController : PlayerController, IController
         if (target != null)
         {
             // Move towards the target at the specified speed
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+            AvoidObstacles();
+            //transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
 
             // Check if the target has been reached
             if (transform.position == target.transform.position)
@@ -238,6 +244,35 @@ public class RivalController : PlayerController, IController
     {
         if (dirt == null) return false;
         return pickLayer <= dirt.depth;
+    }
+
+    void AvoidObstacles()
+    {
+        Vector2 currentDirection = Vector2.zero;
+        Vector2 targetPosition = target.transform.position;
+
+        // Calculate direction to target position
+        Vector2 directionToTarget = targetPosition - (Vector2)transform.position;
+        currentDirection = Vector2.MoveTowards(currentDirection, directionToTarget, Time.deltaTime * speed);
+        
+        // Cast ray in current direction
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
+        if (hit.collider != null) {
+            var ran = Random.Range(0, 10);
+            if (ran == 1)
+            {
+                GetTarget("Dirt");
+                return;
+            }
+            // Calculate new direction by rotating current direction
+            float angle = Mathf.Sign(Random.value - 0.5f) * raycastAngle;
+            currentDirection = Quaternion.AngleAxis(angle, Vector3.back) * currentDirection;
+            // Cast ray in new direction
+            hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
+        }
+        
+        // Move in current direction
+        transform.position += (Vector3)currentDirection * Time.deltaTime * speed;
     }
 
     #endregion

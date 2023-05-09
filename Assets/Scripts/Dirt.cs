@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class Dirt : MonoBehaviour
 {
@@ -24,8 +25,12 @@ public class Dirt : MonoBehaviour
 
     Color initColor;
 
+    public GameObject wallPrefab;
+    public int wallLuck;
+
     void Start()
     {
+        CreateWall();
         SetLayer();
         depth = maxDepth;
         initColor = dirtSprite.GetComponent<SpriteRenderer>().color;
@@ -37,6 +42,41 @@ public class Dirt : MonoBehaviour
         {
             Damage(Random.Range((int)(maxHealth / 4) , 100));
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void CreateWall()
+    {
+        int pull = Random.Range(0, wallLuck);
+        if (pull == 1 && CheckGenerate())
+        {
+            Instantiate(wallPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+    }
+
+    bool CheckGenerate()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 2f);
+        Collider2D[] dirtCol = colliders.Where(c => c.GetComponent<Wall>() != null || c.GetComponent<RivalController>() != null).ToArray();
+        if (dirtCol.Length > 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    void OnDrawGizmos()
+    {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(new Vector3(0f, 0f, 0f), new Vector3(4f, 4f, 4f));
     }
 
     void SetLayer()
