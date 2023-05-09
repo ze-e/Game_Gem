@@ -174,7 +174,7 @@ public class Dirt : MonoBehaviour
             Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
         }
         //destroy when run out of health
-        else if (health == 0 && depth > 1) DestroyLayer();
+        if (health == 0 && depth > 1) DestroyLayer();
         else if (health == 0 && depth == 1) DestroyDirt();
     }
 
@@ -188,7 +188,7 @@ public class Dirt : MonoBehaviour
             Manager.Instance.RaiseOpacity(dirtSprite, health, maxHealth);
         }
         //destroy when run out of health
-        else if (health == 0 && depth > 1) DestroyLayer();
+        if (health == 0 && depth > 1) DestroyLayer();
         else if (health == 0 && depth == 1) DestroyDirt();
     }
 
