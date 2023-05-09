@@ -18,7 +18,7 @@ public class RivalController : PlayerController, IController
     //pathfinding
     public float speed = 5f;
     public float raycastDistance = 1f;
-    public float raycastAngle = 45f;
+    public float raycastAngle = 15f;
 
     private void Start()
     {
@@ -123,6 +123,7 @@ public class RivalController : PlayerController, IController
     void Mine()
     {
         Collider2D col = CheckDirt();
+        if (col == null) return;
         Dirt dirt = col.gameObject.GetComponent<Dirt>();
         if (dirt != null && CanMine(dirt)) DamageDirt(dirt);
         else
@@ -258,7 +259,7 @@ public class RivalController : PlayerController, IController
         // Cast ray in current direction
         RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
         if (hit.collider != null) {
-            var ran = Random.Range(0, 10);
+            var ran = Random.Range(0, 100);
             if (ran == 1)
             {
                 GetTarget(currentState == RivalState.FollowGem ? "Gem" : "Dirt");
