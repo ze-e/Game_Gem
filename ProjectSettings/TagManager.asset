@@ -9,6 +9,7 @@ TagManager:
   - Rival
   - Empty
   - Item
+  - Explosion
   layers:
   - Default
   - TransparentFX
