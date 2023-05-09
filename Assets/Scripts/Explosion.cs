@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
+    public int damage = 8;
     private void Start()
     {
         DestroyAfterAnimation(gameObject);

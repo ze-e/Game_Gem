@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour, IController
 
         if (collider.tag == "Explosion")
         {
-            Damage(8);
+            Damage(collider.GetComponent<Explosion>().damage);
         }
     }
 
