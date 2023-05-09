@@ -172,6 +172,6 @@ MonoBehaviour:
   currentState: 0
   target: {fileID: 0}
   gemPrefab: {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
-  speed: 20
+  speed: 1
   raycastDistance: 1
   raycastAngle: 45

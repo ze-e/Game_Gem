@@ -19,6 +19,7 @@ public class RivalController : PlayerController, IController
     public float speed = 5f;
     public float raycastDistance = 1f;
     public float raycastAngle = 15f;
+    Vector2 currentDirection = Vector2.zero;
 
     private void Start()
     {
@@ -249,7 +250,6 @@ public class RivalController : PlayerController, IController
 
     void AvoidObstacles()
     {
-        Vector2 currentDirection = Vector2.zero;
         Vector2 targetPosition = target.transform.position;
 
         // Calculate direction to target position
@@ -258,7 +258,7 @@ public class RivalController : PlayerController, IController
         
         // Cast ray in current direction
         RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
-        if (hit.collider != null) {
+        if (hit.collider != null && hit.collider.gameObject.CompareTag("Wall")) {
             var ran = Random.Range(0, 100);
             if (ran == 1)
             {
@@ -269,7 +269,7 @@ public class RivalController : PlayerController, IController
             float angle = Mathf.Sign(Random.value - 0.5f) * raycastAngle;
             currentDirection = Quaternion.AngleAxis(angle, Vector3.back) * currentDirection;
             // Cast ray in new direction
-            hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
+            //hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
         }
         
         // Move in current direction
