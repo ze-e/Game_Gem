@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-    public enum EquippedTypes { Pick, Machete, TNT }
+public enum EquippedTypes { Pick, Machete, TNT }
 
 public class PlayerController : MonoBehaviour, IController
 {
@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour, IController
     protected int throttle = 0;
     protected int throttleBy = 100;
 
+    // audio
+    [SerializeField]
+    protected AudioSource audioSource;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -190,6 +193,7 @@ public class PlayerController : MonoBehaviour, IController
     void StopEquipped()
     {
         isUsingAction = false;
+        audioSource.Stop();
     }
 
     void StopEquippedAnim()
@@ -238,6 +242,8 @@ public class PlayerController : MonoBehaviour, IController
             Dirt dirt = col.GetComponent<Dirt>();
             if (dirt != null && pickLayer <= dirt.depth)
             {
+                //sfx
+                Manager.Instance.PlaySFX(audioSource, "mine");
                 // Start mining the dirt
                 DamageDirt(dirt);
             }
@@ -246,6 +252,7 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Damage(int damageBy)
     {
+        Manager.Instance.PlaySFX(audioSource, "hit_player");
         DamageAnim();
         health -= damageBy;
         if (health < 1) Die();
@@ -264,6 +271,7 @@ public class PlayerController : MonoBehaviour, IController
 
     void Die()
     {
+        Manager.Instance.PlaySFX(audioSource, "die");
         Manager.Instance.DeathAnim(transform.position);
         Manager.Instance.GameOver();
         Destroy(gameObject);
@@ -353,6 +361,7 @@ public class PlayerController : MonoBehaviour, IController
         if (!spriteRenderer) spriteRenderer = GetComponent<SpriteRenderer>();
         return new Vector2(!spriteRenderer.flipX ? transform.position.x + 0.25f : transform.position.x - 0.25f, transform.position.y - 0.25f);
     }
+
 
     #endregion
 

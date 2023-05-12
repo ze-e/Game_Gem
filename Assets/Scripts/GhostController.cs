@@ -17,6 +17,7 @@ public class GhostController : MonoBehaviour
     public float speed = 3f;
 
     Animator animator;
+    AudioSource audioSource;
 
     //throttle
     protected int throttle = 0;
@@ -29,6 +30,7 @@ public class GhostController : MonoBehaviour
         SetRandomColor();
         currentState = GhostState.FollowPlayer;
         health = maxHealth;
+        Manager.Instance.PlaySFX(audioSource, "ghost");
     }
 
     private void FixedUpdate()
@@ -173,6 +175,7 @@ public class GhostController : MonoBehaviour
 
     void Die()
     {
+        Manager.Instance.PlaySFX(audioSource, "ghost_die");
         Manager.Instance.DeathAnim(transform.position);
         Manager.Instance.ghostCount++;
         Destroy(gameObject);

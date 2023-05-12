@@ -13,15 +13,18 @@ public class Manager : MonoBehaviour
     enum GameState { Play, Pause, GameOver }
     GameState currentState; 
     public GameObject player;
+
     /* DB */
-    public static List<GemScrObj> GEM_DB;
+    public static Dictionary<GemType, GemScrObj> GEM_DB;
     [SerializeField]
     private string GEM_DB_PATH = default;
 
+    public static Dictionary<string, AudioClip> AUDIO_DB;
+    [SerializeField]
+    private string AUDIO_DB_PATH = default;
+
     public int Score { get; private set; }
     public int RivalScore { get; private set; }
-
-
 
     /* Random Gen */
     public GameObject rivalprefab;
@@ -51,7 +54,6 @@ public class Manager : MonoBehaviour
     public GameObject bloodPrefab;
     public GameObject deathPrefab;
 
-
     private void Awake()
     {
         if (Instance == null)
@@ -68,7 +70,7 @@ public class Manager : MonoBehaviour
     {
         Score = 0;
         RivalScore = 0;
-        CreateGemDB();
+        CreateDB();
         currentTime = 0;
         GameOverUI.SetActive(false);
         currentState = GameState.Play;
@@ -150,26 +152,45 @@ public class Manager : MonoBehaviour
 
 
     #region db
+    void CreateDB()
+    {
+        CreateGemDB();
+        CreateAudioDB();
+    }
+
     void CreateGemDB()
     {
-        Resources.LoadAll<GemScrObj>(GEM_DB_PATH);
+        GEM_DB = new Dictionary<GemType, GemScrObj>();
+        var _resources = Resources.LoadAll<GemScrObj>(GEM_DB_PATH);
+        foreach (var item in _resources)
+        {
+            GEM_DB.Add(item.gemType, item);
+        }
+    }
+
+    void CreateAudioDB()
+    {
+        AUDIO_DB = new Dictionary<string, AudioClip>();
+        var _resources = Resources.LoadAll<AudioClip>(AUDIO_DB_PATH);
+        foreach (var item in _resources)
+        {
+            AUDIO_DB.Add(item.name, item);
+        }
     }
 
     public GemScrObj FindGem(GemType _gemType)
     {
-        foreach (var _gemData in GEM_DB)
-        {
-            if(_gemData.gemType == _gemType)
-            {
-                return _gemData;
-            }
-        }
-        return null;
+        return GEM_DB[_gemType];
+    }
+
+    public AudioClip FindAudio(string _name)
+    {
+        return AUDIO_DB[_name];
     }
 
     #endregion
 
-    #region spawmn
+    #region spawn
     void Spawn(GameObject objToSpawn)
     {
         Camera mainCamera = Camera.main;
@@ -378,7 +399,17 @@ public class Manager : MonoBehaviour
     {
         Instantiate(deathPrefab, pos, Quaternion.identity);
     }
-
-
     #endregion
+
+    public void PlaySFX(AudioSource _audioSource, string _name)
+    {
+        _audioSource.clip = FindAudio(_name);
+        if (!_audioSource.isPlaying) _audioSource.Play();
+    }
+
+    public void PlaySFX(AudioSource _audioSource, AudioClip _audioClip)
+    {
+        _audioSource.clip = _audioClip;
+        if (!_audioSource.isPlaying) _audioSource.Play();
+    }
 }

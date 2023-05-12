@@ -9,6 +9,9 @@ public class TNT : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Color originalColor;
 
+    [SerializeField]
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,7 @@ public class TNT : MonoBehaviour
         float t = 0;
         while (t < 1)
         {
+            Manager.Instance.PlaySFX(audioSource, "tick");
             spriteRenderer.color = Color.Lerp(originalColor, Color.grey, t);
             t += Time.deltaTime / 0.1f;
             yield return null;
@@ -45,23 +49,13 @@ public class TNT : MonoBehaviour
         }
     }
 
-    //private void FlashWhite()
-    //{
-    //    Color color = spriteRenderer.color;
-    //    spriteRenderer.color = Color.grey;
-    //    Invoke("ResetColor", 0.05f);
-    //}
-
-    //private void ResetColor()
-    //{
-    //    spriteRenderer.color = originalColor;
-    //}
-
     IEnumerator ExplodeAfterDelay()
     {
         // wait for the explosion delay
         yield return new WaitForSeconds(explosionDelay);
-        Explode();
+        audioSource.Stop();
+        Manager.Instance.PlaySFX(audioSource, "explosion");
+        Invoke("Explode", audioSource.clip.length);
     }
 
     void Explode()

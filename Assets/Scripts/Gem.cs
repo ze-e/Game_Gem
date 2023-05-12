@@ -33,6 +33,9 @@ public class Gem : MonoBehaviour
 
     public GameObject gemText;
 
+    //sfx
+    AudioSource audioSource;
+
     private void Awake()
     {
         AttachData();
@@ -61,6 +64,8 @@ public class Gem : MonoBehaviour
     void PickUp<T>(T controller) where T : MonoBehaviour, IController
 
     {
+        var audioSource = GetComponent<AudioSource>();
+        Manager.Instance.PlaySFX(audioSource, "gem");
         if (controller.gameObject.name == "Player") Manager.Instance.AddScore(score);
         else  Manager.Instance.AddRivalScore(score);
         controller.AddGem(gameObject);

@@ -126,10 +126,21 @@ public class RivalController : PlayerController, IController
         Collider2D col = CheckDirt();
         if (col == null) return;
         Dirt dirt = col.gameObject.GetComponent<Dirt>();
-        if (dirt != null && CanMine(dirt)) DamageDirt(dirt);
+        if (dirt != null && CanMine(dirt)) {
+            //sfx
+            Manager.Instance.PlaySFX(audioSource, "mine");
+
+            //attack dirt
+            DamageDirt(dirt);
+        }
         else
         {
+            //sfx
+            audioSource.Stop();
+
+            //anim
             animator.SetBool("Mining", false);
+            
             if (CheckGem(Physics2D.OverlapCircleAll(GetPickPos(), 2f)))
             {
                 currentState = RivalState.FollowGem;
@@ -196,6 +207,7 @@ public class RivalController : PlayerController, IController
 
     public void Damage(float amount)
     {
+        Manager.Instance.PlaySFX(audioSource, "hurt");
         DamageAnim();
         health -= amount;
         if (health < 1) Die();
@@ -204,6 +216,7 @@ public class RivalController : PlayerController, IController
 
     void Die()
     {
+        Manager.Instance.PlaySFX(audioSource, "die");
         Manager.Instance.DeathAnim(transform.position);
         foreach (GemScrObj _gem in Gems)
         {

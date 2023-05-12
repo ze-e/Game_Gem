@@ -12,4 +12,5 @@ public class GemScrObj : ScriptableObject
     public string description;
     public Sprite sprite;
     public Color color;
+    public AudioClip audio;
 }
