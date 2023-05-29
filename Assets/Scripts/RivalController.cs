@@ -195,7 +195,7 @@ public class RivalController : PlayerController, IController
         for (int i = 1; i < targets.Length; i++)
         {
             float distance = Vector2.Distance(transform.position, targets[i].transform.position);
-            if (distance < nearestDistance && (tag == "Gem" || CanMine(targets[i])) && !lastTargets.Contains(targets[i]))
+            if (distance < nearestDistance && (tag == "Gem" || CanMine(targets[i])) && !lastTargets.Contains(targets[i]) && CanMove(nearest))
             {
                 nearest = targets[i];
                 nearestDistance = distance;

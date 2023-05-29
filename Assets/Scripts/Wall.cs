@@ -38,7 +38,7 @@ public class Wall : MonoBehaviour
         BoxCollider2D collider = GetComponent<BoxCollider2D>();
 
         // Set the size of the BoxCollider2D to match the size of the sprite
-        collider.size = spriteSize;
+        collider.size = spriteSize * 0.5f;
     }
 
     void OnDrawGizmos()
