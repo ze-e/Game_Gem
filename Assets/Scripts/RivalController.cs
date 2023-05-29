@@ -19,7 +19,6 @@ public class RivalController : PlayerController, IController
     public float speed = 5f;
     public float raycastDistance = 1f;
     public float raycastAngle = 15f;
-    Vector2 currentDirection = Vector2.zero;
     //reset pathfinding
     public float targetDelay = 10f;
 
@@ -162,7 +161,6 @@ public class RivalController : PlayerController, IController
         if (target != null)
         {
             // Move towards the target at the specified speed
-            //AvoidObstacles();
             transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
 
             // Check if the target has been reached
@@ -204,7 +202,7 @@ public class RivalController : PlayerController, IController
             }
         }
 
-        if (tag == "Gem" || CanMine(nearest))  target = nearest; 
+        if ((tag == "Gem" || CanMine(nearest)) && CanMove(nearest))  target = nearest; 
         else
         {
             currentState = RivalState.Walk;
@@ -277,33 +275,21 @@ public class RivalController : PlayerController, IController
         return pickLayer <= dirt.depth;
     }
 
-    //void AvoidObstacles()
-    //{
-    //    Vector2 targetPosition = target.transform.position;
+    bool CanMove(GameObject gameObject)
+    {
+        Vector2 startPos = transform.position;
+        Vector2 endPos = gameObject.transform.position;
 
-    //    // Calculate direction to target position
-    //    Vector2 directionToTarget = targetPosition - (Vector2)transform.position;
-    //    currentDirection = Vector2.MoveTowards(currentDirection, directionToTarget, Time.deltaTime * speed);
-        
-    //    // Cast ray in current direction
-    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
-    //    if (hit.collider != null && hit.collider.gameObject.CompareTag("Wall")) {
-    //        var ran = Random.Range(0, 100);
-    //        if (ran == 1)
-    //        {
-    //            GetTarget(currentState == RivalState.FollowGem ? "Gem" : "Dirt");
-    //            return;
-    //        }
-    //        // Calculate new direction by rotating current direction
-    //        float angle = Mathf.Sign(Random.value - 0.5f) * raycastAngle;
-    //        currentDirection = Quaternion.AngleAxis(angle, Vector3.back) * currentDirection;
-    //        // Cast ray in new direction
-    //        //hit = Physics2D.Raycast(transform.position, currentDirection, raycastDistance);
-    //    }
-        
-    //    // Move in current direction
-    //    transform.position += (Vector3)currentDirection * Time.deltaTime * speed;
-    //}
+        // Perform the raycast
+        RaycastHit2D hit = Physics2D.Linecast(startPos, endPos);
+
+        if (hit.collider != null && hit.collider.CompareTag("Wall"))
+        {
+            return false; 
+        }
+
+        return true; 
+    }
 
     #endregion
 
