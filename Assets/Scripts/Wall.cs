@@ -63,7 +63,7 @@ public class Wall : MonoBehaviour
         spriteRenderer.sprite = dirtSprite;
 
         // Set the sorting order to be behind the parent object
-        spriteRenderer.sortingOrder = GetComponent<SpriteRenderer>().sortingOrder - 1;
+        spriteRenderer.sortingOrder = 1;
 
         // Offset the position of the dirt sprite to be directly underneath the parent object
         Vector3 dirtPosition = dirtObject.transform.position;

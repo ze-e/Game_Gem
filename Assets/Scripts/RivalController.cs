@@ -205,7 +205,8 @@ public class RivalController : PlayerController, IController
         if ((tag == "Gem" || CanMine(nearest)) && CanMove(nearest))  target = nearest; 
         else
         {
-            currentState = RivalState.Walk;
+            if (target == null) currentState = RivalState.Check;
+            else if (target != null) currentState = RivalState.Walk;
         }
     }
 
@@ -283,7 +284,7 @@ public class RivalController : PlayerController, IController
         // Perform the raycast
         RaycastHit2D hit = Physics2D.Linecast(startPos, endPos);
 
-        if (hit.collider != null && hit.collider.CompareTag("Wall"))
+        if (hit.collider != null && hit.collider.CompareTag("Wall") || hit.collider.CompareTag("Rival"))
         {
             return false; 
         }

@@ -26,6 +26,7 @@ public class GhostController : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         SetRandomColor();
         currentState = GhostState.FollowPlayer;
