@@ -229,7 +229,8 @@ public class RivalController : PlayerController, IController
         if ((tag == "Gem" || CanMine(nearest)) && CanMove(nearest))  target = nearest; 
         else
         {
-            currentState = RivalState.Walk;
+            //currentState = RivalState.Walk;
+            currentState = RivalState.Check;
         }
     }
 

@@ -137,7 +137,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0025231838, y: -0.08518046}
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 1
   _miningSpeed: 1
-  _pickLayer: 10
+  _pickLayer: 5
   _maxHealth: 10
   TNTPrefab: {fileID: 0}
   audioSource: {fileID: -81040757476986762}

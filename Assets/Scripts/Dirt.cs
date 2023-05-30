@@ -21,7 +21,7 @@ public class Dirt : MonoBehaviour
     float health;
 
     public int depth;
-    int maxDepth = 10;
+    public int maxDepth = 10;
 
     Color initColor;
 
@@ -30,7 +30,7 @@ public class Dirt : MonoBehaviour
 
     void Start()
     {
-        CreateWall();
+        //CreateWall();
         SetLayer();
         depth = maxDepth;
         initColor = dirtSprite.GetComponent<SpriteRenderer>().color;
