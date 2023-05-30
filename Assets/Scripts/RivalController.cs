@@ -31,7 +31,8 @@ public class RivalController : PlayerController, IController
         lastTargets = new List<GameObject>();
 
         //reset pathfinding
-        StartCoroutine(ResetTarget());
+        StartCoroutine(RepeatFindNewTarget(10f));
+
     }
 
     private void FixedUpdate()
@@ -209,15 +210,16 @@ public class RivalController : PlayerController, IController
         }
     }
 
-    private IEnumerator ResetTarget()
+    private IEnumerator RepeatFindNewTarget(float delay)
     {
-        yield return new WaitForSeconds(targetDelay);
-        if (target != null && (currentState == RivalState.FollowGem || currentState == RivalState.Walk))
-        {
-            GetTarget(currentState == RivalState.FollowGem ? "Gem" : "Dirt");
-        }
-            StartCoroutine(ResetTarget());
+            if (currentState == RivalState.Walk || currentState == RivalState.FollowGem)
+            {
+                GetTarget(currentState == RivalState.Walk ? "Dirt" : "Walk");
+            }
+
+            yield return new WaitForSeconds(delay);
     }
+
 
     public void Damage(float amount)
     {
@@ -283,7 +285,7 @@ public class RivalController : PlayerController, IController
         // Perform the raycast
         RaycastHit2D hit = Physics2D.Linecast(startPos, endPos);
 
-        if (hit.collider != null && hit.collider.CompareTag("Wall") )
+        if (hit.collider != null && hit.collider.CompareTag("Wall"))
         {
             return false; 
         }

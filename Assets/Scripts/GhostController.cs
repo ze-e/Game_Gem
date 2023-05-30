@@ -97,7 +97,7 @@ public class GhostController : MonoBehaviour
         foreach (Collider2D collider in playerCol)
         {
             PlayerController player = collider.GetComponent<PlayerController>();
-            if (player != null)
+            if (player != null && player.gameObject.name == "Player")
             {
                 return player;
             }

@@ -137,7 +137,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0025231838, y: -0.08518046}
@@ -171,15 +171,13 @@ MonoBehaviour:
   _maxHealth: 10
   TNTPrefab: {fileID: 0}
   audioSource: {fileID: -81040757476986762}
-  mineSFX: {fileID: 8300000, guid: 91cb464811143c74580113046a90e0ef, type: 3}
-  playerHitSFX: {fileID: 0}
   currentState: 0
   target: {fileID: 0}
   gemPrefab: {fileID: 3306948186543017077, guid: 129e86a7ec3e42145b552832875acaa2, type: 3}
   speed: 1
   raycastDistance: 1
   raycastAngle: 45
-  rivalHitSFX: {fileID: 8300000, guid: e319b2370468d7047a77ea13f8b293a6, type: 3}
+  targetDelay: 10
 --- !u!82 &-81040757476986762
 AudioSource:
   m_ObjectHideFlags: 0

@@ -252,7 +252,7 @@ public class PlayerController : MonoBehaviour, IController
 
     public void Damage(int damageBy)
     {
-        Manager.Instance.PlaySFX(audioSource, "hit_player");
+        Manager.Instance.PlaySFX(audioSource, "hurt_player");
         DamageAnim();
         health -= damageBy;
         if (health < 1) Die();
