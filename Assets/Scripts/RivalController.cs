@@ -75,6 +75,15 @@ public class RivalController : PlayerController, IController
         }
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Item")
+        {
+            Item _item = collider.GetComponent<Item>();
+            AddItem(_item);
+            Destroy(collider.gameObject);
+        }
+    }
 
     void SetRandomColor()
     {
@@ -118,11 +127,20 @@ public class RivalController : PlayerController, IController
 
     void Check()
     {
-        // Check if there is dirt at the player's position
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(GetPickPos(), 2f);
-        if (CheckGem(colliders)) return;
-        else if (CheckDirt(colliders)) return;
-        currentState = RivalState.Walk;
+        if (equipment.Contains(EquippedTypes.TNT))
+        {
+            equipment.Remove(EquippedTypes.TNT);
+            Instantiate(TNTPrefab, transform.position, Quaternion.identity);
+            return;
+        }
+        else
+        {
+            // Check if there is dirt at the player's position
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(GetPickPos(), 2f);
+            if (CheckGem(colliders)) return;
+            else if (CheckDirt(colliders)) return;
+            currentState = RivalState.Walk;
+        }
     }
 
 
@@ -285,7 +303,7 @@ public class RivalController : PlayerController, IController
         // Perform the raycast
         RaycastHit2D hit = Physics2D.Linecast(startPos, endPos);
 
-        if (hit.collider != null && hit.collider.CompareTag("Wall"))
+        if (hit.collider != null && (hit.collider.CompareTag("Wall") || hit.collider.CompareTag("Empty")))
         {
             return false; 
         }

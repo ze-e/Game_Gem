@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour, IController
 
     // inventory
     protected List<GemScrObj> Gems = new List<GemScrObj>();
-    List<EquippedTypes> equipment = new List<EquippedTypes> { EquippedTypes.Pick, EquippedTypes.Machete };
+    protected List<EquippedTypes> equipment = new List<EquippedTypes> { EquippedTypes.Pick, EquippedTypes.Machete };
     EquippedTypes primaryEquipped = EquippedTypes.Pick;
 
     public GameObject TNTPrefab;
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour, IController
         }
     }
 
-    protected void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
         if(collider.tag == "Item")
         {
@@ -338,7 +338,7 @@ public class PlayerController : MonoBehaviour, IController
         Gems.Add(gemData);
     }
 
-    void AddItem(Item _item)
+    protected void AddItem(Item _item)
     {
         Manager.Instance.ShowText(transform, _item.name, Color.white);
         equipment.Add(_item.equippedType);
