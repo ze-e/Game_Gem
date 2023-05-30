@@ -83,6 +83,11 @@ public class RivalController : PlayerController, IController
             AddItem(_item);
             Destroy(collider.gameObject);
         }
+
+        if (collider.tag == "Explosion")
+        {
+            Damage(collider.GetComponent<Explosion>().damage);
+        }
     }
 
     void SetRandomColor()
