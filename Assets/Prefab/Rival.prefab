@@ -169,7 +169,7 @@ MonoBehaviour:
   _miningSpeed: 1
   _pickLayer: 5
   _maxHealth: 10
-  TNTPrefab: {fileID: 0}
+  TNTPrefab: {fileID: 6735678791392976251, guid: 128fdac1fb15ab148a2950bf9124ef2f, type: 3}
   audioSource: {fileID: -81040757476986762}
   currentState: 0
   target: {fileID: 0}

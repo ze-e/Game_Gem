@@ -22,6 +22,9 @@ public class RivalController : PlayerController, IController
     //reset pathfinding
     public float targetDelay = 10f;
 
+    //debug
+    public GameObject miningObject;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -113,14 +116,29 @@ public class RivalController : PlayerController, IController
 
     bool CheckDirt(Collider2D[] colliders)
     {
-        Collider2D[] dirtCol = colliders.Where(c => c.GetComponent<Dirt>() != null).ToArray();
-
-        if (dirtCol.Length > 0)
+        List<GameObject> colliderList = new List<GameObject>();
+        foreach (var item in colliders)
         {
-            foreach (var item in dirtCol)
+            if (item.CompareTag("Dirt"))
             {
-                if (CanMine(item.gameObject))
+                colliderList.Add(item.gameObject);
+            }
+        }
+
+        if (colliderList.Count > 0)
+        {
+            foreach (var item in colliderList)
+            {
+                if (item.GetComponent<Dirt>() != null && CanMine(item) == true)
                 {
+                    miningObject = item;
+                    if (item.CompareTag("Rival")) {
+                        foreach (var i in colliderList)
+                        {
+                            Debug.Log(i);
+                        }
+                        Debug.LogError("how many times do I have to check this??????" + miningObject); 
+                    }
                     animator.SetBool("Mining", true);
                     currentState = RivalState.Mine;
                     return true;
@@ -152,7 +170,11 @@ public class RivalController : PlayerController, IController
     void Mine()
     {
         Collider2D col = CheckDirt();
-        if (col == null) return;
+        if (col == null) {
+            miningObject = null;
+            currentState = RivalState.Walk;
+            return;
+        };
         Dirt dirt = col.gameObject.GetComponent<Dirt>();
         if (dirt != null && CanMine(dirt)) {
             //sfx
@@ -245,13 +267,18 @@ public class RivalController : PlayerController, IController
     }
 
 
-    public void Damage(float amount)
+    public new void Damage(float amount)
     {
         Manager.Instance.PlaySFX(audioSource, "hurt");
         DamageAnim();
         health -= amount;
         if (health < 1) Die();
         Manager.Instance.ReddenSprite(gameObject, health, maxHealth);
+    }
+
+    public new void Heal()
+    {
+        health = maxHealth;
     }
 
     void Die()
